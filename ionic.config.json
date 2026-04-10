@@ -1,0 +1,7 @@
+{
+  "name": "alevo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
