@@ -1,56 +1,49 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <AppNavbar />
 
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+    <ion-content :scroll-events="true" @ionScroll="handleScroll">
+      <HeroSection :scroll-y="scrollY" />
+      <TalentosSection />
+      <AlianzasSection />
+      <SistemaSponsors />
+      <SponsorCTA />
+      <AppFooter />
     </ion-content>
+
+    <FloatingInvestButton @click="openAtletasModal" />
+    <AtletasModal ref="atletasModalRef" />
+    <SponsorModal />
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { ref } from 'vue'
+import { IonContent, IonPage } from '@ionic/vue'
+import AppNavbar from '@/components/Home/AppNavbar.vue'
+import AppFooter from '@/components/Home/AppFooter.vue'
+import SponsorModal from '@/components/Modales/SponsorModal.vue'
+import AtletasModal from '@/components/Modales/AtletasModal.vue'
+import HeroSection from '@/components/Home/HeroSection.vue'
+import TalentosSection from '@/components/Home/TalentosSection.vue'
+import AlianzasSection from '@/components/Home/AlianzasSection.vue'
+import SistemaSponsors from '@/components/Home/SistemaSponsors.vue'
+import SponsorCTA from '@/components/Home/SponsorCTA.vue'
+import FloatingInvestButton from '@/components/Home/FloatingInvestButton.vue'
+import { useScrollEffects } from '@/composables/useScrollEffects'
+import { useModal } from '@/composables/useModal'
+
+const { handleScroll, scrollY } = useScrollEffects()
+const { openModal } = useModal()
+const atletasModalRef = ref<InstanceType<typeof AtletasModal> | null>(null)
+
+const openAtletasModal = () => {
+  atletasModalRef.value?.open()
+}
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
+ion-content {
+  --background: var(--color-bg);
 }
 </style>
