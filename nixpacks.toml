@@ -1,8 +1,13 @@
+[phases.setup]
+nixPkgs = ["nodejs", "nodePackages.npm"]
+
 [phases.build]
-# Esto limita la RAM para que no falle el build en tu VPS
-cmds = ["npm install", "node --max-old-space-size=1024 ./node_modules/.bin/vite build"]
+cmds = ["npm install", "npm run build"]
 
 [static]
+
 directory = "dist"
-# Esto es lo que arregla el error 404 en las biografías
 fallback = "index.html"
+
+[variables]
+NODE_ENV = "production"
