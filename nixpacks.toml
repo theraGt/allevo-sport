@@ -2,10 +2,11 @@
 nixPkgs = ["nodejs", "nodePackages.npm"]
 
 [phases.build]
-cmds = ["npm install", "npm run build"]
+# Instalamos y compilamos forzando a Vite
+cmds = ["npm install", "npx vite build"]
 
 [static]
-
+# ESTA ES LA CLAVE: Si esto no apunta a "dist", verás el error de MIME type
 directory = "dist"
 fallback = "index.html"
 
