@@ -9,7 +9,7 @@
           <span class="text-black">MARCA PATROCINADORA</span>
         </div>
 
-        <button class="banner-btn" @click="openModal">
+        <button class="btn-primary" @click="openModal">
           QUIERO PATROCINAR
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
             <path
@@ -157,40 +157,6 @@ onUnmounted(() => {
   line-height: 1.2;
 }
 
-.banner-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: #0D1117;
-  border: none;
-  padding: 16px 32px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 50px;
-  white-space: nowrap;
-}
-
-.banner-btn:hover {
-  background-color: #EE2B24;
-  transform: translateX(5px);
-}
-
-.banner-btn svg {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.9s ease;
-}
-
-.banner-btn:hover svg {
-  transform: translateX(5px);
-}
-
 @media (max-width: 768px) {
   .sponsor-cta {
     min-height: 280px;
@@ -210,7 +176,7 @@ onUnmounted(() => {
     align-items: center;
   }
 
-  .banner-btn {
+  .btn-primary {
     width: 100%;
     justify-content: center;
   }

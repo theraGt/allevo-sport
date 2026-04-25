@@ -114,18 +114,34 @@ const pasos = [
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--color-border);
   transition: all var(--transition-fast);
+  position: relative;
+}
+
+.timeline-step::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(207, 46, 46, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .timeline-step:hover {
-  border-color: var(--color-primary);
+  border-color: rgba(207, 46, 46, 0.35);
   transform: translateX(10px);
-  background: linear-gradient(135deg, var(--color-surface) 0%, rgba(207, 46, 46, 0.05) 100%);
-  box-shadow: 0 8px 25px rgba(207, 46, 46, 0.15);
+  background: linear-gradient(135deg, var(--color-surface) 0%, rgba(207, 46, 46, 0.08) 100%);
+  box-shadow: 0 15px 35px rgba(207, 46, 46, 0.2);
+}
+
+.timeline-step:hover::before {
+  opacity: 1;
 }
 
 .timeline-step:hover .step-number {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(207, 46, 46, 0.4);
+  transform: scale(1.15);
+  box-shadow: 0 6px 16px rgba(207, 46, 46, 0.5);
 }
 
 .timeline-step:hover .step-content h3 {
@@ -133,7 +149,7 @@ const pasos = [
 }
 
 .timeline-step:hover .step-content p {
-  color: var(--color-text);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .step-number {

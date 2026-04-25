@@ -2,7 +2,7 @@
   <ion-page>
     <AppNavbar />
     
-    <ion-content :scroll-events="true">
+    <ion-content :scroll-events="true" id="main-content">
       <MarcasHero />
       <AlcanceSection />
       <SponsorsSection />

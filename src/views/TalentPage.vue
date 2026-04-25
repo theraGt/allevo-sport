@@ -2,7 +2,7 @@
   <ion-page>
     <AppNavbar />
 
-    <ion-content :scroll-events="true">
+    <ion-content :scroll-events="true" id="main-content">
       <section class="talentos-page">
         <div class="poster-layout">
           <h2 class="background-text">TALENTS</h2>
@@ -20,7 +20,7 @@
             <button 
               v-for="filter in filters" 
               :key="filter"
-              :class="['filter-btn', { active: activeFilter === filter }]" 
+              :class="['btn-primary', 'filter-btn', { active: activeFilter === filter }]" 
               @click="setFilter(filter)"
             >
               {{ filter }}
@@ -41,7 +41,7 @@
               <div class="card-info">
                 <h3>{{ talento.nombre }}</h3>
                 <span class="disciplina">{{ talento.disciplina }}</span>
-                <a :href="'/talento/' + talento.slug" class="btn-vermas">VER MÁS</a>
+                <a :href="'/talento/' + talento.slug" class="btn-primary">VER MÁS</a>
                 <div class="social-links" v-if="talento.instagram || talento.tiktok">
                   <a 
                     v-if="talento.instagram" 
@@ -77,7 +77,7 @@
                 <span class="text-black">MI TALENTO</span>
                 <p>Explora nuestras oportunidades, conecta con mentores y compañeros; comienza hoy mismo tu camino hacia la excelencia.</p>
               </div>
-              <a href="#contacto" class="banner-btn">
+              <a href="#contacto" class="btn-primary">
                 Contáctanos
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
                   <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z" />
@@ -297,25 +297,25 @@ ion-content {
 }
 
 .filter-btn {
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
   padding: 12px 28px;
-  border: 2px solid #EE2B24;
   background: transparent;
-  color: white;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: none;
+  filter: none;
 }
 
 .filter-btn:hover {
-  background: rgba(238, 43, 36, 0.3);
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(207, 46, 46, 0.2);
 }
 
 .filter-btn.active {
-  background: #EE2B24;
-  color: white;
+  background: linear-gradient(135deg, #CF2E2E 0%, #8b1e1e 100%);
+  box-shadow: 0 8px 24px rgba(207, 46, 46, 0.35);
+}
+
+.filter-btn.active:hover {
+  filter: brightness(1.15);
 }
 
 .talentos-grid {
@@ -465,24 +465,7 @@ ion-content {
   margin-bottom: 15px;
 }
 
-.btn-vermas {
-  display: inline-block;
-  padding: 8px 20px;
-  background-color: transparent;
-  border: 2px solid #CC0000;
-  color: #ffffff;
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
 
-.talento-card:hover .btn-vermas {
-  background-color: #CC0000;
-}
 
 .social-links {
   display: flex;
@@ -582,36 +565,6 @@ ion-content {
   font-size: 0.95rem;
 }
 
-.banner-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: #0D1117;
-  border: none;
-  padding: 16px 32px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 50px;
-  white-space: nowrap;
-  text-decoration: none;
-}
-
-.banner-btn:hover {
-  background-color: #EE2B24;
-  transform: translateX(5px);
-}
-
-.banner-btn svg {
-  width: 18px;
-  height: 18px;
-}
-
 @media (max-width: 1024px) {
   .talentos-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -651,7 +604,7 @@ ion-content {
     align-items: center;
   }
 
-  .banner-btn {
+  .btn-primary {
     width: 100%;
     justify-content: center;
   }

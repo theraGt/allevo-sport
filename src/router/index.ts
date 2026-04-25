@@ -16,6 +16,7 @@ import DashboardOverview from '../views/Admin/DashboardOverview.vue'
 import AtletasDashboard from '../views/Admin/AtletasDashboard.vue'
 import SponsorsDashboard from '../views/Admin/SponsorsDashboard.vue'
 import InversionistasDashboard from '../views/Admin/InversionistasDashboard.vue'
+import ProyectosDashboard from '../views/Admin/ProyectosDashboard.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -48,6 +49,26 @@ const routes: Array<RouteRecordRaw> = [
     component: MarcasPage
   },
   {
+    path: '/se-parte',
+    name: 'JoinEcosystem',
+    component: JoinEcosystem
+  },
+  {
+    path: '/contacto',
+    name: 'Contacto',
+    component: ContactoPage
+  },
+  {
+    path: '/terminos',
+    name: 'Terminos',
+    component: TerminosPage
+  },
+  {
+    path: '/privacidad',
+    name: 'Privacidad',
+    component: PrivacidadPage
+  },
+  {
     path: '/noticias',
     name: 'Noticias',
     component: NoticiasPage
@@ -59,33 +80,32 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/admin/dashboard',
-    component: DashboardLayout,
-    children: [
-      {
-        path: '',
-        redirect: '/admin/dashboard/overview'
-      },
-      {
-        path: 'overview',
-        name: 'DashboardOverview',
-        component: DashboardOverview
-      },
-      {
-        path: 'atletas',
-        name: 'AtletasDashboard',
-        component: AtletasDashboard
-      },
-      {
-        path: 'sponsors',
-        name: 'SponsorsDashboard',
-        component: SponsorsDashboard
-      },
-      {
-        path: 'inversionistas',
-        name: 'InversionistasDashboard',
-        component: InversionistasDashboard
-      }
-    ]
+    redirect: '/admin/dashboard/overview'
+  },
+  {
+    path: '/admin/dashboard/overview',
+    name: 'DashboardOverview',
+    component: DashboardOverview
+  },
+  {
+    path: '/admin/dashboard/atletas',
+    name: 'AtletasDashboard',
+    component: AtletasDashboard
+  },
+  {
+    path: '/admin/dashboard/sponsors',
+    name: 'SponsorsDashboard',
+    component: SponsorsDashboard
+  },
+  {
+    path: '/admin/dashboard/inversionistas',
+    name: 'InversionistasDashboard',
+    component: InversionistasDashboard
+  },
+  {
+    path: '/admin/dashboard/proyectos',
+    name: 'ProyectosDashboard',
+    component: ProyectosDashboard
   }
 ]
 

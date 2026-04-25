@@ -1,5 +1,7 @@
 <template>
-  <div class="dashboard-inversionistas">
+  <ion-page>
+    <DashboardLayout>
+      <div class="dashboard-inversionistas">
     <div class="page-header">
       <div class="title-row">
         <div class="sep"></div>
@@ -201,11 +203,15 @@
         <button class="btn-primary full-width">CONECTAR WALLET</button>
       </div>
     </div>
-  </div>
+      </div>
+    </DashboardLayout>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import { IonPage } from '@ionic/vue'
+import DashboardLayout from '../../components/Admin/Dashboard/DashboardLayout.vue'
 import { inversoresData, transaccionesData, atletasData, performanceData } from '../../data/adminDashboard'
 import StatsCard from '../../components/Admin/Dashboard/StatsCard.vue'
 
@@ -336,6 +342,21 @@ onMounted(async () => {
   padding: 20px;
 }
 
+.chart-card {
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card .card-header {
+  flex-shrink: 0;
+}
+
+.chart-card .chart-container {
+  flex: 1;
+  min-height: 280px;
+}
+
 .card-header {
   display: flex;
   align-items: center;
@@ -366,6 +387,11 @@ onMounted(async () => {
 
 .chart-container {
   height: 280px;
+  min-height: 280px;
+}
+
+.chart-container .apexcharts-canvas {
+  height: 100% !important;
 }
 
 .tokens-grid {

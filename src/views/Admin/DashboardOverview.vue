@@ -1,5 +1,7 @@
 <template>
-  <div class="dashboard-overview">
+  <ion-page>
+    <DashboardLayout>
+      <div class="dashboard-overview">
     <div class="page-header">
       <div class="title-row">
         <div class="sep"></div>
@@ -151,11 +153,15 @@
         </div>
       </div>
     </div>
-  </div>
+      </div>
+    </DashboardLayout>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import { IonPage } from '@ionic/vue'
+import DashboardLayout from '../../components/Admin/Dashboard/DashboardLayout.vue'
 import { atletasData, transaccionesData, distributionData, performanceData, overviewStats } from '../../data/adminDashboard'
 import StatsCard from '../../components/Admin/Dashboard/StatsCard.vue'
 

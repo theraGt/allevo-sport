@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <AppNavbar />
-    <ion-content :scroll-events="true" class="privacidad-page">
+    <ion-content :scroll-events="true" class="privacidad-page" id="main-content">
       <div class="privacidad-container">
         <header class="privacidad-header">
           <h1>POLÍTICA DE PRIVACIDAD</h1>

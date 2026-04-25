@@ -2,24 +2,28 @@
   <ion-page>
     <AppNavbar />
 
-    <ion-content :scroll-events="true" class="join-ecosystem-page">
+    <ion-content :scroll-events="true" class="join-ecosystem-page" id="main-content">
       <div class="page-bg">
         <div class="bg-gradient"></div>
-        <div class="bg-particles"></div>
       </div>
 
       <EcosystemHero />
 
-      <JoinTabs 
-        :active-role="activeRole" 
-        @update:active-role="activeRole = $event" 
+      <JoinTabs
+        :active-role="activeRole"
+        @update:active-role="activeRole = $event"
+        @show-email-form="showEmailForm = true"
       />
 
-      <div class="forms-section">
+      <div v-if="showEmailForm" class="forms-section">
         <div class="forms-container">
+          <button class="back-btn" @click="showEmailForm = false">
+            <ion-icon :icon="arrowBackOutline"></ion-icon>
+            Volver a opciones de registro
+          </button>
           <Transition name="fade-slide" mode="out-in">
-            <component 
-              :is="formComponents[activeRole]" 
+            <component
+              :is="formComponents[activeRole]"
               :key="activeRole"
             />
           </Transition>
@@ -36,8 +40,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, markRaw } from 'vue'
-import { IonContent, IonPage } from '@ionic/vue'
+import { ref, markRaw } from 'vue'
+import { IonContent, IonPage, IonIcon } from '@ionic/vue'
+import { arrowBackOutline } from 'ionicons/icons'
 import AppNavbar from '@/components/Home/AppNavbar.vue'
 import AppFooter from '@/components/Home/AppFooter.vue'
 import EcosystemHero from '@/components/JoinEcosystem/EcosystemHero.vue'
@@ -49,6 +54,7 @@ import TalentForm from '@/components/JoinEcosystem/TalentForm.vue'
 import AllyForm from '@/components/JoinEcosystem/AllyForm.vue'
 
 const activeRole = ref<'inversionista' | 'talento' | 'aliado'>('inversionista')
+const showEmailForm = ref(false)
 
 const formComponents = {
   inversionista: markRaw(InvestorForm),
@@ -72,32 +78,13 @@ const formComponents = {
 .bg-gradient {
   position: absolute;
   inset: 0;
-  background: 
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(207, 46, 46, 0.1), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(207, 46, 46, 0.05), transparent),
-    linear-gradient(180deg, #0b0b0b 0%, #0f0f0f 100%);
-}
-
-.bg-particles {
-  position: absolute;
-  inset: 0;
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(207, 46, 46, 0.08) 0%, transparent 1%),
-    radial-gradient(circle at 80% 70%, rgba(207, 46, 46, 0.05) 0%, transparent 1%),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 1%);
-  background-size: 100px 100px, 150px 150px, 200px 200px;
-  animation: particle-float 20s linear infinite;
-}
-
-@keyframes particle-float {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-100px); }
+  background: radial-gradient(ellipse at center, #1a0505 0%, #0a0a0a 70%);
 }
 
 .forms-section {
   position: relative;
   z-index: 1;
-  padding: 40px 20px 60px;
+  padding: 0 20px 60px;
 }
 
 .forms-container {
@@ -106,12 +93,23 @@ const formComponents = {
   position: relative;
 }
 
-.forms-container::before {
-  content: '';
-  position: absolute;
-  inset: -20px;
-  background: radial-gradient(ellipse at center, rgba(207, 46, 46, 0.05), transparent 70%);
-  pointer-events: none;
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #9CA3AF;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.back-btn:hover {
+  color: #EF4444;
 }
 
 .fade-slide-enter-active,
@@ -137,9 +135,9 @@ const formComponents = {
 
 @media (max-width: 768px) {
   .forms-section {
-    padding: 30px 16px 50px;
+    padding: 0 16px 50px;
   }
-  
+
   .forms-container {
     max-width: 100%;
   }

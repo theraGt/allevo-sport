@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <AppNavbar />
-    <ion-content :scroll-events="true" class="contacto-page">
+    <ion-content :scroll-events="true" class="contacto-page" id="main-content">
       <div class="page-bg">
         <div class="bg-gradient"></div>
         <div class="bg-particles"></div>
@@ -166,7 +166,7 @@
                 ></textarea>
               </div>
               
-              <button type="submit" class="submit-btn">
+              <button type="submit" class="btn-primary">
                 <span>ENVIAR MENSAJE</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
@@ -589,46 +589,6 @@ const handleSubmit = () => {
 .form-group textarea {
   resize: vertical;
   min-height: 130px;
-}
-
-.submit-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  background: linear-gradient(135deg, #CF2E2E 0%, #8b1e1e 100%);
-  color: #fff;
-  border: none;
-  padding: 18px 32px;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  cursor: pointer;
-  border-radius: 14px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 10px 30px rgba(207, 46, 46, 0.35);
-  clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
-  margin-top: 8px;
-}
-
-.submit-btn:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(207, 46, 46, 0.5);
-  filter: brightness(1.1);
-}
-
-.submit-btn:active {
-  transform: translateY(-2px) scale(0.99);
-}
-
-.submit-btn svg {
-  transition: transform 0.3s ease;
-}
-
-.submit-btn:hover svg {
-  transform: translate(4px, -4px);
 }
 
 @media (max-width: 900px) {

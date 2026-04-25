@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <AppNavbar />
-    <ion-content :scroll-events="true" class="terminos-page">
+    <ion-content :scroll-events="true" class="terminos-page" id="main-content">
       <div class="terminos-container">
         <header class="terminos-header">
           <h1>TÉRMINOS Y CONDICIONES</h1>

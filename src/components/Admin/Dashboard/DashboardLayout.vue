@@ -39,42 +39,134 @@
             :class="{ active: $route.path.includes('inversionistas') }">
             INVERSIONISTAS
           </router-link>
+          <router-link to="/admin/dashboard/proyectos" class="nav-link"
+            :class="{ active: $route.path.includes('proyectos') }">
+            PROYECTOS
+          </router-link>
         </nav>
 
         <div class="header-right">
-          <div class="network-badge">
+          <button class="menu-toggle" @click="toggleMenu" :class="{ active: isMenuOpen }">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="network-badge desktop-only">
             <span class="live-dot"></span>
             <span>POLYGON</span>
           </div>
-          <button class="btn-primary">
+          <button class="btn-primary desktop-only">
             CONECTAR WALLET
+          </button>
+          <button class="btn-logout desktop-only" @click="logout">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="16" height="16">
+              <path d="M377.9 105.9L340.7 68.7c-7.5-7.5-19.7-7.5-27.2 0l-25.2 25.2c-7.5 7.5-7.5 19.7 0 27.2l47.1 47.1H224c-13.3 0-24 10.7-24 24v32c0 13.3 10.7 24 24 24h136.6l-47.1 47.1c-7.5 7.5-7.5 19.7 0 27.2l25.2 25.2c7.5 7.5 19.7 7.5 27.2 0l37.2-37.2c7.5-7.5 7.5-19.7 0-27.2zM224 352h-64c-13.3 0-24-10.7-24-24V128c0-13.3 10.7-24 24-24h64c13.3 0 24 10.7 24 24v200c0 13.3-10.7 24-24 24zM160 128c-13.3 0-24-10.7-24-24S146.7 80 160 80h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H160z"/>
+            </svg>
+            SALIR
           </button>
         </div>
       </div>
     </header>
 
+    <div class="mobile-menu" :class="{ open: isMenuOpen }">
+      <div class="mobile-menu-overlay" @click="closeMenu"></div>
+      <div class="mobile-menu-panel">
+        <div class="mobile-menu-header">
+          <h3>MENU</h3>
+          <button class="close-btn" @click="closeMenu">✕</button>
+        </div>
+        <nav class="mobile-nav">
+          <router-link to="/admin/dashboard/overview" class="mobile-nav-link" @click="closeMenu">PANEL RWA</router-link>
+          <router-link to="/admin/dashboard/atletas" class="mobile-nav-link" @click="closeMenu">TALENTOS</router-link>
+          <router-link to="/admin/dashboard/sponsors" class="mobile-nav-link" @click="closeMenu">SPONSORS</router-link>
+          <router-link to="/admin/dashboard/inversionistas" class="mobile-nav-link" @click="closeMenu">INVERSIONISTAS</router-link>
+          <router-link to="/admin/dashboard/proyectos" class="mobile-nav-link" @click="closeMenu">PROYECTOS</router-link>
+        </nav>
+        <div class="mobile-menu-actions">
+          <button class="btn-primary" @click="closeMenu">CONECTAR WALLET</button>
+          <button class="btn-logout" @click="handleLogout">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="16" height="16">
+              <path d="M377.9 105.9L340.7 68.7c-7.5-7.5-19.7-7.5-27.2 0l-25.2 25.2c-7.5 7.5-7.5 19.7 0 27.2l47.1 47.1H224c-13.3 0-24 10.7-24 24v32c0 13.3 10.7 24 24 24h136.6l-47.1 47.1c-7.5 7.5-7.5 19.7 0 27.2l25.2 25.2c7.5 7.5 19.7 7.5 27.2 0l37.2-37.2c7.5-7.5 7.5-19.7 0-27.2zM224 352h-64c-13.3 0-24-10.7-24-24V128c0-13.3 10.7-24 24-24h64c13.3 0 24 10.7 24 24v200c0 13.3-10.7 24-24 24zM160 128c-13.3 0-24-10.7-24-24S146.7 80 160 80h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H160z"/>
+            </svg>
+            SALIR
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="dashboard-main">
-      <router-view />
+      <slot />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { tickerData } from '../../../data/adminDashboard'
 
+const router = useRouter()
 const tickerItems = [...tickerData, ...tickerData]
+const isMenuOpen = ref(false)
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+const closeMenu = () => {
+  isMenuOpen.value = false
+}
+
+const logout = () => {
+  router.push('/admin/login')
+}
+
+const handleLogout = () => {
+  closeMenu()
+  router.push('/admin/login')
+}
 </script>
 
 <style scoped>
 .dashboard-layout {
-  min-height: 100vh;
+  position: absolute;
+  inset: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
   background-color: var(--color-bg);
-  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-layout > .ticker-wrap {
+  flex-shrink: 0;
+}
+
+.dashboard-layout > .dashboard-header {
+  flex-shrink: 0;
+}
+
+.dashboard-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dashboard-main::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.dashboard-main::-webkit-scrollbar-thumb {
+  background: rgba(207, 46, 46, 0.4);
+  border-radius: 4px;
+}
+
+.dashboard-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(207, 46, 46, 0.6);
 }
 
 .dashboard-layout::before {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
@@ -84,7 +176,7 @@ const tickerItems = [...tickerData, ...tickerData]
 
 .dashboard-layout::after {
   content: '';
-  position: fixed;
+  position: absolute;
   top: -200px;
   left: 50%;
   transform: translateX(-50%);
@@ -143,8 +235,6 @@ const tickerItems = [...tickerData, ...tickerData]
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(16px);
-  position: sticky;
-  top: 0;
 }
 
 .header-container {
@@ -211,17 +301,18 @@ const tickerItems = [...tickerData, ...tickerData]
 .nav-link {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.15em;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   padding: 20px 16px;
-  color: #555;
+  color: #888;
   text-decoration: none;
   transition: all 0.25s;
   border-bottom: 2px solid transparent;
 }
 
 .nav-link:hover {
-  color: #ccc;
+  color: var(--color-primary);
 }
 
 .nav-link.active {
@@ -288,16 +379,181 @@ const tickerItems = [...tickerData, ...tickerData]
   box-shadow: 0 0 24px rgba(207, 46, 46, 0.35);
 }
 
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  transition: all 0.25s;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+.btn-logout:hover {
+  background: rgba(207, 46, 46, 0.15);
+  border-color: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 0 24px rgba(207, 46, 46, 0.35);
+}
+
 .dashboard-main {
-  position: relative;
-  z-index: 1;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   padding: 32px;
+  box-sizing: border-box;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #fff;
+  transition: all 0.3s;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.mobile-menu.open {
+  display: block;
+}
+
+.mobile-menu-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.mobile-menu-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 280px;
+  max-width: 85%;
+  height: 100%;
+  background: var(--color-bg);
+  border-left: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mobile-menu-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: #fff;
+  margin: 0;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.mobile-nav {
+  flex: 1;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 14px 20px;
+  color: var(--color-text);
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  border-left: 3px solid transparent;
+  transition: all 0.25s;
+}
+
+.mobile-nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-nav-link.router-link-active {
+  background: rgba(207, 46, 46, 0.1);
+  border-left-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.mobile-menu-actions {
+  padding: 20px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.desktop-only {
+  display: flex;
 }
 
 @media (max-width: 1024px) {
   .header-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .desktop-only {
     display: none;
   }
 }

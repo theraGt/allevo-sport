@@ -228,24 +228,7 @@ const shareApp = () => {
   margin: 0 0 16px;
 }
 
-.action-btn {
-  display: inline-block;
-  padding: 10px 20px;
-  background: rgba(207, 46, 46, 0.1);
-  border: 1px solid #CF2E2E;
-  border-radius: 8px;
-  color: #CF2E2E;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
 
-.action-btn:hover {
-  background: #CF2E2E;
-  color: #fff;
-}
 
 .share-section {
   margin-bottom: 24px;

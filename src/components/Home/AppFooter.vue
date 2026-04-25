@@ -15,7 +15,7 @@
             <form @submit.prevent="subscribeNewsletter" class="newsletter-form">
               <input type="email" v-model="email" placeholder="Tu correo electrónico" required
                 class="newsletter-input" />
-              <button type="submit" class="newsletter-btn">SUSCRIBIR</button>
+              <button type="submit" class="btn-primary">SUSCRIBIR</button>
             </form>
           </div>
         </div>
@@ -24,11 +24,11 @@
         <div class="footer-links">
           <h4 class="section-title">LINKS</h4>
           <ul>
-            <li><a href="#">Trabaja con nosotros</a></li>
-            <li><a href="#">Derechos</a></li>
-            <li><a href="#">Manejo de cookies</a></li>
-            <li><a href="#">Mapa del sitio</a></li>
-            <li><a href="#">Legal</a></li>
+            <li><router-link to="/terminos">Terminos y Condiciones</router-link></li>
+            <li><router-link to="/privacidad">Politicas de privacidad</router-link></li>
+            <li><router-link to="/noticias">Noticias</router-link></li>
+            <li><router-link to="/sistema">Sistema</router-link></li>
+            <li><router-link to="/se-parte">Se Parte</router-link></li>
           </ul>
         </div>
 
@@ -36,11 +36,11 @@
         <div class="footer-popular">
           <h4 class="section-title">POPULAR</h4>
           <ul>
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#talentos">Talento</a></li>
-            <li><a href="#eventos">Ligas</a></li>
-            <li><a href="#noticias">Noticias</a></li>
-            <li><a href="#alianzas">Marcas</a></li>
+            <li><router-link to="/home">Inicio</router-link></li>
+            <li><router-link to="/talentos">Talento</router-link></li>
+            <li><router-link to="/marcas">Alianzas</router-link></li>
+            <li><router-link to="/sistema">Sistema</router-link></li>
+            <li><router-link to="/contacto">Sponsor</router-link></li>
           </ul>
         </div>
 
@@ -106,6 +106,9 @@ const subscribeNewsletter = () => {
   background-color: #0D1117;
   padding: 60px 0 20px;
   width: 100%;
+  position: relative;
+  z-index: 100;
+  pointer-events: auto !important;
 }
 
 .footer-container {
@@ -129,18 +132,17 @@ const subscribeNewsletter = () => {
 }
 
 .logo img {
-  height: 180px;
+  height: 120px; /* Reducido de 180px para evitar overflow masivo */
   width: auto;
   position: relative;
-  top: -70px;
+  margin-bottom: 20px;
 }
 
 .tagline {
   color: #ffffff;
   font-size: 0.9rem;
   opacity: 0.8;
-  margin: 0 0 0px 0;
-  margin-top: -100px;
+  margin: 0 0 20px 0;
 }
 
 .newsletter-wrapper {
@@ -169,24 +171,11 @@ const subscribeNewsletter = () => {
   text-align: center;
 }
 
-.newsletter-btn {
+.newsletter-form .btn-primary {
+  border-radius: 0 12px 12px 0;
   padding: 14px 20px;
-  background-color: #EE2B24;
-  border: none;
-  border-radius: 0 8px 8px 0;
-  color: #ffffff;
-  font-family: 'Oswald', sans-serif;
   font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  white-space: nowrap;
-}
-
-.newsletter-btn:hover {
-  background-color: #ff3b35;
-  transform: scale(1.02);
+  clip-path: none;
 }
 
 /* Links & Popular */
@@ -400,11 +389,12 @@ const subscribeNewsletter = () => {
     text-align: center;
   }
 
-  .newsletter-btn {
+  .newsletter-form .btn-primary {
     border-radius: 8px;
     width: 100%;
     padding: 12px 16px;
     font-size: 0.8rem;
+    clip-path: none;
   }
 
   .section-title {

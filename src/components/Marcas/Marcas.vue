@@ -7,8 +7,8 @@
     </div>
 
     <div class="container">
-      <div class="content-wrapper">
-        <header class="text-content" v-reveal="'fade-right'">
+      <div class="content-wrapper" v-reveal="'fade-up'">
+        <header class="text-content">
           <h2 class="subtitle-top">ALLEVO</h2>
           <h1 class="main-title">SPONSORS</h1>
           <p class="description">
@@ -16,10 +16,10 @@
             Este espacio reúne a las organizaciones y aliados que comparten nuestra visión,
             aportando su experiencia y compromiso.
           </p>
-          <div class="cta-wrapper" v-reveal="'fade-up'">
-            <button class="btn-aliado" @click="handleAliadoClick">
+          <div class="cta-wrapper">
+            <button class="btn-primary" @click="handleAliadoClick">
               CONVERTIRME EN ALIADO
-              <span class="arrow-icon">→</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>
             </button>
           </div>
         </header>
@@ -31,10 +31,9 @@
 <script setup lang="ts">
 import { useMouseParallax } from '@/composables/useMouseParallax'
 
-const { parallaxStyle } = useMouseParallax(30) // Un factor mayor para un efecto más pronunciado
+const { parallaxStyle } = useMouseParallax(30)
 
 const handleAliadoClick = () => {
-  // Aquí se podría abrir un modal o navegar a una sección de contacto
   console.log('Click en Convertirme en Aliado')
 }
 </script>
@@ -49,7 +48,6 @@ const handleAliadoClick = () => {
   background-color: #000;
   overflow: hidden;
   padding-top: 80px;
-  /* Espacio para el Navbar */
 }
 
 .parallax-container {
@@ -57,14 +55,12 @@ const handleAliadoClick = () => {
   top: 0;
   right: 0;
   width: 65%;
-  /* Ocupa más de la mitad derecha */
   height: 100%;
   z-index: 1;
 }
 
 .parallax-image {
   width: 120%;
-  /* Sobredimensionada para el parallax */
   height: 110%;
   object-fit: cover;
   object-position: center;
@@ -76,7 +72,7 @@ const handleAliadoClick = () => {
 .overlay-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.8) 30%, transparent 100%);
+  background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 35%, rgba(0,0,0,0.15) 65%, transparent 100%);
   z-index: 2;
 }
 
@@ -90,12 +86,21 @@ const handleAliadoClick = () => {
 }
 
 .content-wrapper {
-  max-width: 600px;
+  max-width: 640px;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 48px 56px;
+  text-align: center;
 }
 
 .text-content {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0;
 }
 
@@ -115,7 +120,7 @@ const handleAliadoClick = () => {
   font-size: 5rem;
   font-weight: 700;
   color: #fff;
-  margin: 0 0 30px 0;
+  margin: 0 0 24px 0;
   line-height: 0.9;
   letter-spacing: 1px;
 }
@@ -125,63 +130,13 @@ const handleAliadoClick = () => {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.6;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   max-width: 520px;
 }
 
 .cta-wrapper {
   display: flex;
-}
-
-.btn-aliado {
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  padding: 14px 40px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  border-radius: 4px;
-  /* Según el diseño rectangular suavizado */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-aliado::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.btn-aliado:hover {
-  background: rgba(255, 255, 255, 0.6);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-}
-
-.btn-aliado:hover::before {
-  left: 100%;
-}
-
-.arrow-icon {
-  font-size: 1.2rem;
-  transition: transform 0.3s ease;
-}
-
-.btn-aliado:hover .arrow-icon {
-  transform: translateX(5px);
+  justify-content: center;
 }
 
 @media (max-width: 1024px) {
@@ -198,7 +153,7 @@ const handleAliadoClick = () => {
   }
 
   .overlay-gradient {
-    background: linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.7) 100%);
+    background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.2) 100%);
   }
 
   .marcas-hero {
@@ -216,6 +171,11 @@ const handleAliadoClick = () => {
 
   .container {
     padding: 0 20px;
+  }
+
+  .content-wrapper {
+    padding: 32px 24px;
+    max-width: 100%;
   }
 
   .main-title {

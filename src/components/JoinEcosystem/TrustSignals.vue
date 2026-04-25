@@ -2,42 +2,37 @@
   <section class="trust-signals">
     <div class="signals-container">
       <div class="signals-grid">
-        <div class="signal-item" v-reveal="'slide-up'" :style="{ '--delay': '0.1s' }">
+        <div class="signal-item" v-reveal="'fade-up'" :style="{ '--delay': '0.1s' }">
           <div class="signal-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
+            <ion-icon :icon="shieldCheckmarkOutline"></ion-icon>
           </div>
-          <h4>Datos Encriptados</h4>
+          <h4>DATOS ENCRIPTADOS</h4>
           <p>Tu información está segura con encriptación de nivel bancario</p>
         </div>
-        
-        <div class="signal-item" v-reveal="'slide-up'" :style="{ '--delay': '0.2s' }">
+
+        <div class="signal-item" v-reveal="'fade-up'" :style="{ '--delay': '0.2s' }">
           <div class="signal-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12,6 12,12 16,14"/>
-            </svg>
+            <ion-icon :icon="timeOutline"></ion-icon>
           </div>
-          <h4>Aprobación en 24h</h4>
+          <h4>APROBACIÓN EN 24H</h4>
           <p>Proceso de verificación rápido y eficiente</p>
         </div>
-        
-        <div class="signal-item" v-reveal="'slide-up'" :style="{ '--delay': '0.3s' }">
+
+        <div class="signal-item" v-reveal="'fade-up'" :style="{ '--delay': '0.3s' }">
           <div class="signal-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
+            <ion-icon :icon="peopleOutline"></ion-icon>
           </div>
-          <h4>+500 Usuarios Activos</h4>
+          <h4>+500 USUARIOS ACTIVOS</h4>
           <p>Comunidad creciente de atletas e inversionistas</p>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+import { shieldCheckmarkOutline, timeOutline, peopleOutline } from 'ionicons/icons'
+</script>
 
 <style scoped>
 .trust-signals {
@@ -60,15 +55,13 @@
 .signal-item {
   position: relative;
   text-align: center;
-  padding: 32px 20px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
+  padding: 32px 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  animation: slide-up 0.6s ease forwards;
-  animation-delay: var(--delay, 0s);
-  opacity: 0;
+  transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform, box-shadow;
 }
 
 .signal-item::before {
@@ -77,67 +70,65 @@
   inset: 0;
   border-radius: inherit;
   opacity: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(207, 46, 46, 0.1), transparent 60%);
+  background: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.12), transparent 60%);
   transition: opacity 0.4s ease;
   pointer-events: none;
+  z-index: 0;
 }
 
 .signal-item:hover {
   transform: translateY(-8px);
-  border-color: rgba(207, 46, 46, 0.25);
-  box-shadow: 0 20px 40px rgba(207, 46, 46, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  box-shadow: 0 20px 50px rgba(239, 68, 68, 0.12), 0 0 0 1px rgba(239, 68, 68, 0.15);
 }
 
 .signal-item:hover::before {
   opacity: 1;
 }
 
+.signal-item h4,
+.signal-item p,
 .signal-icon {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.signal-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(207, 46, 46, 0.15), rgba(207, 46, 46, 0.05));
-  border-radius: 16px;
-  color: #CF2E2E;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 50%;
+  color: #EF4444;
+  font-size: 24px;
   transition: all 0.4s ease;
 }
 
 .signal-item:hover .signal-icon {
   transform: scale(1.1);
-  background: linear-gradient(135deg, rgba(207, 46, 46, 0.25), rgba(207, 46, 46, 0.1));
-  box-shadow: 0 8px 24px rgba(207, 46, 46, 0.25);
+  background: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);
 }
 
 .signal-item h4 {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.05rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
-  margin: 0 0 10px;
+  margin: 0 0 10px 0;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 1px;
 }
 
 .signal-item p {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #9CA3AF;
   margin: 0;
   line-height: 1.5;
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (max-width: 768px) {
@@ -145,7 +136,7 @@
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .signal-item {
     padding: 28px 20px;
   }

@@ -28,7 +28,7 @@
           <div class="card-info">
             <h3>{{ talento.nombre }}</h3>
             <span class="disciplina">{{ talento.disciplina }}</span>
-            <a :href="'/talento/' + talento.slug" class="btn-vermas">VER MÁS</a>
+            <a :href="'/talento/' + talento.slug" class="btn-primary">VER MÁS</a>
             <div class="social-links" v-if="talento.instagram || talento.tiktok">
               <a v-if="talento.instagram" :href="talento.instagram" target="_blank" rel="noopener noreferrer"
                 class="social-icon instagram">
@@ -376,24 +376,7 @@ const talentos = [
   margin-bottom: 15px;
 }
 
-.btn-vermas {
-  display: inline-block;
-  padding: 8px 20px;
-  background-color: transparent;
-  border: 2px solid #CC0000;
-  color: #ffffff;
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
 
-.talento-card:hover .btn-vermas {
-  background-color: #CC0000;
-}
 
 .social-links {
   display: flex;

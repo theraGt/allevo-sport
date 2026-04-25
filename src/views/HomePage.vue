@@ -2,7 +2,7 @@
   <ion-page>
     <AppNavbar />
 
-    <ion-content :scroll-events="true" @ionScroll="handleScroll">
+    <ion-content :scroll-events="true" @ionScroll="handleScroll" id="main-content">
       <HeroSection :scroll-y="scrollY" />
       <TalentosSection />
       <AlianzasSection />

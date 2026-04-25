@@ -134,7 +134,7 @@ const handleLogin = async () => {
 
     await new Promise(resolve => setTimeout(resolve, 1500))
 
-    if (email.value === 'admin@alevo.com' && password.value === 'admin123') {
+    if (email.value === 'admin@allevo.com' && password.value === 'admin123') {
         window.location.href = '/admin/dashboard/overview'
     } else {
         loginError.value = 'Credenciales incorrectas. Intenta de nuevo.'

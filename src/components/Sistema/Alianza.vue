@@ -202,11 +202,28 @@ onUnmounted(() => {
     transition: all 0.4s ease;
     padding: 20px;
     border-radius: 12px;
+    position: relative;
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(207, 46, 46, 0.08), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: inherit;
 }
 
 .stats-card:hover {
-    background: rgba(255, 255, 255, 0.03);
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+    background: rgba(207, 46, 46, 0.03);
+    box-shadow: 0 15px 35px rgba(207, 46, 46, 0.15);
+    border-color: rgba(207, 46, 46, 0.25);
+}
+
+.stats-card:hover::before {
+    opacity: 1;
 }
 
 .stats-title {
@@ -269,19 +286,104 @@ onUnmounted(() => {
 @media (max-width: 768px) {
     .alianza-section {
         padding: 60px 0;
+        background-attachment: scroll;
+    }
+
+    .alianza-header {
+        margin-bottom: 40px;
+        padding: 0 16px;
+    }
+
+    .alianza-title {
+        font-size: clamp(1.6rem, 6vw, 2.2rem);
+        margin-bottom: 16px;
+    }
+
+    .alianza-subtitle {
+        font-size: 0.95rem;
     }
 
     .stats-grid {
         grid-template-columns: 1fr;
-        gap: 60px;
+        gap: 32px;
+        padding: 0 16px;
+    }
+
+    .stats-card {
+        padding: 16px;
+    }
+
+    .stats-title {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
     }
 
     .stats-items {
-        gap: 40px;
+        gap: 32px;
+    }
+
+    .star-icon {
+        width: 40px;
+        height: 40px;
     }
 
     .percentage {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
+    }
+
+    .label {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .alianza-section {
+        padding: 40px 0;
+    }
+
+    .alianza-header {
+        margin-bottom: 32px;
+        padding: 0 12px;
+    }
+
+    .alianza-title {
+        font-size: clamp(1.4rem, 7vw, 1.8rem);
+    }
+
+    .alianza-subtitle {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    .stats-grid {
+        gap: 24px;
+        padding: 0 12px;
+    }
+
+    .stats-card {
+        padding: 12px 8px;
+    }
+
+    .stats-title {
+        font-size: 1rem;
+        margin-bottom: 16px;
+    }
+
+    .stats-items {
+        gap: 24px;
+    }
+
+    .star-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .percentage {
+        font-size: 1.4rem;
+    }
+
+    .label {
+        font-size: 0.75rem;
     }
 }
 </style>

@@ -34,6 +34,9 @@ import '@ionic/vue/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 
+/* Custom animations */
+import './styles/animations.css';
+
 /* Custom Directives */
 import { vReveal } from './directives/vReveal';
 

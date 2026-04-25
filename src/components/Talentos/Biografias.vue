@@ -10,9 +10,12 @@
         <span class="deporte-badge">{{ talento.deporte }}</span>
         <h1 class="nombreAtleta">{{ talento.nombreCompleto }}</h1>
         <p class="alias-deportivo" v-if="talento.aliasDeportivo">{{ talento.aliasDeportivo }}</p>
-        <div class="cinturon" v-if="talento.rangoCinturon">
-          <span class="cinturon-badge">{{ talento.rangoCinturon }}</span>
-        </div>
+        <a href="#inversion" class="btn-primary hero-cta" @click.prevent="scrollToInversion">
+          Invierte en Mi Carrera
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+          </svg>
+        </a>
       </div>
     </div>
 
@@ -35,6 +38,10 @@
           <div class="stat-card">
             <span class="stat-value">{{ talento.rankingActual || 'N/A' }}</span>
             <span class="stat-label">Ranking</span>
+          </div>
+          <div class="stat-card" v-if="talento.rangoCinturon && talento.rangoCinturon !== 'N/A'">
+            <span class="stat-value">{{ talento.rangoCinturon }}</span>
+            <span class="stat-label">Rango</span>
           </div>
         </div>
       </div>
@@ -69,31 +76,41 @@
       </div>
     </div>
 
-    <!-- D. Timeline (Palmarés) -->
+    <!-- D. Timeline (Logros) -->
     <div class="palmares-section">
       <div class="container">
-        <h2 class="section-title">Palmarés</h2>
+        <h2 class="section-title">Logros</h2>
         <div class="timeline">
-          <div 
-            v-for="(logro, index) in talento.logros" 
-            :key="index"
-            class="timeline-item"
-            :class="{ destacado: logro.destacado }"
-          >
-            <div class="timeline-marker">
-              <svg v-if="logro.destacado" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-              </svg>
+          <TransitionGroup name="timeline">
+            <div 
+              v-for="(logro, index) in logrosMostrados" 
+              :key="index"
+              class="timeline-item"
+              :class="{ destacado: logro.destacado }"
+            >
+              <div class="timeline-marker">
+                <svg v-if="logro.destacado" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <span class="timeline-year">{{ logro.anio }}</span>
+                <h4 class="timeline-torneo">{{ logro.torneo }}</h4>
+                <span class="timeline-posicion" :class="'posicion-' + logro.posicion.toLowerCase()">
+                  {{ logro.posicion }}
+                </span>
+                <span class="timeline-categoria">{{ logro.categoria }}</span>
+              </div>
             </div>
-            <div class="timeline-content">
-              <span class="timeline-year">{{ logro.anio }}</span>
-              <h4 class="timeline-torneo">{{ logro.torneo }}</h4>
-              <span class="timeline-posicion" :class="'posicion-' + logro.posicion.toLowerCase()">
-                {{ logro.posicion }}
-              </span>
-              <span class="timeline-categoria">{{ logro.categoria }}</span>
-            </div>
-          </div>
+          </TransitionGroup>
+        </div>
+        <div class="timeline-toggle" v-if="talento.logros.length > logrosPorDefecto">
+          <button class="btn-primary timeline-btn" @click="toggleLogros">
+            {{ mostrandoTodos ? 'Ver menos logros' : 'Ver más logros' }}
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" :style="{ transform: mostrandoTodos ? 'rotate(180deg)' : '' }">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -124,7 +141,7 @@
     </div>
 
     <!-- F. Módulo de Inversión -->
-    <div class="inversion-section">
+    <div class="inversion-section" id="inversion">
       <div class="container">
         <div class="inversion-card">
           <div class="inversion-header">
@@ -162,7 +179,7 @@
               <span class="nivel-riesgo" :class="'riesgo-' + talento.nivelRiesgo">
                 Nivel de Riesgo: {{ getNivelRiesgoLabel(talento.nivelRiesgo) }}
               </span>
-              <a href="#contacto" class="btn-invertir">
+              <a href="#contacto" class="btn-primary">
                 Invierte en Mi Carrera
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
@@ -193,13 +210,13 @@
     <div class="container">
       <h2>Atleta no encontrado</h2>
       <p>Lo sentimos, el perfil que buscas no existe.</p>
-      <a href="/talentos" class="btn-volver">Ver Todos los Atletas</a>
+      <a href="/talentos" class="btn-primary">Ver Todos los Atletas</a>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Logro {
   anio: number
@@ -250,6 +267,7 @@ interface TalentProfile {
   rangoCinturon: string
   mejorMarcaPersonal: string
   clubFederacion: string
+  liga?: string
   fechaInicio: number
   redesSociales: RedesSociales
   nivelRiesgo: 'bajo' | 'medio' | 'alto'
@@ -378,7 +396,7 @@ const talentosData: Record<string, TalentProfile> = {
     },
     logros: [
       { anio: 2024, torneo: 'Señor Guatemala', posicion: '1er Lugar', categoria: 'Físico Clásico 1.68', destacado: true },
-      { anio: 2024, tournament: 'Juegos Nacionales', posicion: '1er Lugar', categoria: 'Físico Clásico 1.71', destacado: true },
+      { anio: 2024, torneo: 'Juegos Nacionales', posicion: '1er Lugar', categoria: 'Físico Clásico 1.71', destacado: true },
       { anio: 2024, torneo: 'Señor Antigua', posicion: '1er Lugar', categoria: 'Ciudad Vieja', destacado: true },
       { anio: 2024, torneo: 'Regional', posicion: '3er Lugar', categoria: 'Antigua Guatemala', destacado: false }
     ],
@@ -495,32 +513,32 @@ const talentosData: Record<string, TalentProfile> = {
     },
     logros: [
       { anio: 2024, torneo: 'Campeonato Mundial Masculino Tashkent', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
-      { anio: 2016, tournament: 'Serie Mundial Boxeo Masculino Argelia', posicion: 'Entrenador', categoria: 'Internacional', destacado: true },
-      { anio: 2016, tournament: 'Campeonato Mundial Femenino Taped China', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
-      { anio: 2015, tournament: 'Campeonato Mundial Femenino Bern China', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
-      { anio: 2014, tournament: 'Campeonato Mundial Jeju Korea del Sur', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
-      { anio: 2014, tournament: 'Campeonato Mundial Juvenil Masculino Sofia Bulgaria', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
-      { anio: 2013, tournament: 'Campeonato Mundial Femenino Turquía', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
-      { anio: 1996, tournament: 'Torneo Pre-Olímpico Atlanta 1996 Halifax', posicion: 'Entrenador', categoria: 'Pre-Olímpico', destacado: true },
-      { anio: 1995, tournament: 'IV Campeonato Centroamericano San José Costa Rica', posicion: '1er Lugar por equipos', categoria: 'Centroamericano', destacado: true },
-      { anio: 1994, tournament: 'V Juegos Centroamericanos El Salvador', posicion: 'Campeón por equipos', categoria: 'Centroamericano', destacado: true },
-      { anio: 1988, tournament: 'Juegos Panamericanos', posicion: 'Entrenador', categoria: 'Panamericano', destacado: true },
-      { anio: 1987, tournament: 'III Festival Olímpico Mexicano Querétaro', posicion: '3er Lugar por equipos', categoria: 'Internacional', destacado: true },
-      { anio: 1987, tournament: 'Campeonato Centroamericano y del Caribe San José Costa Rica', posicion: 'Entrenador', categoria: 'Centroamericano', destacado: true },
-      { anio: 1985, tournament: 'III Juegos Centroamericanos por la Paz', posicion: '1er Lugar por equipos', categoria: 'Centroamericano', destacado: true },
-      { anio: 1984, tournament: 'Juegos Olímpicos Ángeles', posicion: 'Entrenador de Carlos Motta', categoria: 'Olímpico', destacado: true },
-      { anio: 1982, tournament: 'XIV Juegos Centroamericanos y del Caribe Habana Cuba', posicion: 'Medalla de Bronce', categoria: 'Centroamericano', destacado: true },
-      { anio: 1982, tournament: 'Gira por México', posicion: 'Equipo invicto', categoria: 'Internacional', destacado: true },
-      { anio: 1984, tournament: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
-      { anio: 1985, tournament: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
-      { anio: 1986, tournament: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
-      { anio: 1987, tournament: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
-      { anio: 1988, tournament: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
-      { anio: 1989, tournament: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
-      { anio: 1973, tournament: 'Campeonato Nacional', posicion: 'Nominado Más Técnico', categoria: 'Nacional', destacado: false },
-      { anio: 1982, tournament: 'Campeón Nacional Categoría Mosca', posicion: '1er Lugar', categoria: 'Nacional', destacado: true },
-      { anio: 1983, tournament: 'Campeón Nacional Categoría Mosca', posicion: '1er Lugar', categoria: 'Nacional', destacado: true },
-      { anio: 1984, tournament: 'Campeón Nacional Categoría Mosca', posicion: '1er Lugar', categoria: 'Nacional', destacado: true }
+      { anio: 2016, torneo: 'Serie Mundial Boxeo Masculino Argelia', posicion: 'Entrenador', categoria: 'Internacional', destacado: true },
+      { anio: 2016, torneo: 'Campeonato Mundial Femenino Taped China', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
+      { anio: 2015, torneo: 'Campeonato Mundial Femenino Bern China', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
+      { anio: 2014, torneo: 'Campeonato Mundial Jeju Korea del Sur', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
+      { anio: 2014, torneo: 'Campeonato Mundial Juvenil Masculino Sofia Bulgaria', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
+      { anio: 2013, torneo: 'Campeonato Mundial Femenino Turquía', posicion: 'Entrenador', categoria: 'Mundial', destacado: true },
+      { anio: 1996, torneo: 'Torneo Pre-Olímpico Atlanta 1996 Halifax', posicion: 'Entrenador', categoria: 'Pre-Olímpico', destacado: true },
+      { anio: 1995, torneo: 'IV Campeonato Centroamericano San José Costa Rica', posicion: '1er Lugar por equipos', categoria: 'Centroamericano', destacado: true },
+      { anio: 1994, torneo: 'V Juegos Centroamericanos El Salvador', posicion: 'Campeón por equipos', categoria: 'Centroamericano', destacado: true },
+      { anio: 1988, torneo: 'Juegos Panamericanos', posicion: 'Entrenador', categoria: 'Panamericano', destacado: true },
+      { anio: 1987, torneo: 'III Festival Olímpico Mexicano Querétaro', posicion: '3er Lugar por equipos', categoria: 'Internacional', destacado: true },
+      { anio: 1987, torneo: 'Campeonato Centroamericano y del Caribe San José Costa Rica', posicion: 'Entrenador', categoria: 'Centroamericano', destacado: true },
+      { anio: 1985, torneo: 'III Juegos Centroamericanos por la Paz', posicion: '1er Lugar por equipos', categoria: 'Centroamericano', destacado: true },
+      { anio: 1984, torneo: 'Juegos Olímpicos Ángeles', posicion: 'Entrenador de Carlos Motta', categoria: 'Olímpico', destacado: true },
+      { anio: 1982, torneo: 'XIV Juegos Centroamericanos y del Caribe Habana Cuba', posicion: 'Medalla de Bronce', categoria: 'Centroamericano', destacado: true },
+      { anio: 1982, torneo: 'Gira por México', posicion: 'Equipo invicto', categoria: 'Internacional', destacado: true },
+      { anio: 1984, torneo: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
+      { anio: 1985, torneo: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
+      { anio: 1986, torneo: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
+      { anio: 1987, torneo: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
+      { anio: 1988, torneo: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
+      { anio: 1989, torneo: 'Guantes de Oro', posicion: 'Entrenador Selección A y B', categoria: 'Nacional', destacado: false },
+      { anio: 1973, torneo: 'Campeonato Nacional', posicion: 'Nominado Más Técnico', categoria: 'Nacional', destacado: false },
+      { anio: 1982, torneo: 'Campeón Nacional Categoría Mosca', posicion: '1er Lugar', categoria: 'Nacional', destacado: true },
+      { anio: 1983, torneo: 'Campeón Nacional Categoría Mosca', posicion: '1er Lugar', categoria: 'Nacional', destacado: true },
+      { anio: 1984, torneo: 'Campeón Nacional Categoría Mosca', posicion: '1er Lugar', categoria: 'Nacional', destacado: true }
     ],
     galeria: []
   },
@@ -556,20 +574,47 @@ const talentosData: Record<string, TalentProfile> = {
       vision: 'Continuar inspirando a otros a entrenar con disciplina, ciencia y constancia. Consolidarme como referente en la calistenia de resistencia a nivel internacional.'
     },
     logros: [
-      { anio: 2025, tournament: 'WSWCF Calisthenics Regional Games', posicion: 'Subcampéon Centroamericano', categoria: 'Calisthenics', destacado: true },
+      { anio: 2025, torneo: 'WSWCF Calisthenics Regional Games', posicion: 'Subcampéon Centroamericano', categoria: 'Calisthenics', destacado: true },
       { anio: 2025, torneo: 'Torneo Nacional de Calistenia', posicion: 'Subcampéon Nacional', categoria: 'Calistenia', destacado: true },
-      { anio: 2025, tournament: 'Reto Jaguar Endurance Online', posicion: 'Ganador', categoria: 'Endurance', destacado: true },
-      { anio: 2025, tournament: 'Calisthenics Battle', posicion: 'Ganador', categoria: 'Batalla', destacado: true },
-      { anio: 2024, tournament: 'WSWCF Calisthenics Regional Games', posicion: 'Top 20', categoria: 'Centroamericano', destacado: true },
-      { anio: 2023, tournament: 'Campeonato Nacional de Fuerza y Resistencia', posicion: '3er Lugar', categoria: 'Resistencia', destacado: false },
-      { anio: 2023, tournament: 'BPM Games', posicion: '2do Lugar', categoria: 'General', destacado: false },
-      { anio: 2023, tournament: 'Festival de la Juventud', posicion: '2do Lugar', categoria: 'Max Reps', destacado: false }
+      { anio: 2025, torneo: 'Reto Jaguar Endurance Online', posicion: 'Ganador', categoria: 'Endurance', destacado: true },
+      { anio: 2025, torneo: 'Calisthenics Battle', posicion: 'Ganador', categoria: 'Batalla', destacado: true },
+      { anio: 2024, torneo: 'WSWCF Calisthenics Regional Games', posicion: 'Top 20', categoria: 'Centroamericano', destacado: true },
+      { anio: 2023, torneo: 'Campeonato Nacional de Fuerza y Resistencia', posicion: '3er Lugar', categoria: 'Resistencia', destacado: false },
+      { anio: 2023, torneo: 'BPM Games', posicion: '2do Lugar', categoria: 'General', destacado: false },
+      { anio: 2023, torneo: 'Festival de la Juventud', posicion: '2do Lugar', categoria: 'Max Reps', destacado: false }
     ],
     galeria: []
   }
 }
 
 const talento = computed(() => talentosData[props.slug])
+
+const logrosPorDefecto = 5
+const logrosVisibles = ref(logrosPorDefecto)
+
+const logrosMostrados = computed(() => {
+  if (!talento.value) return []
+  return talento.value.logros.slice(0, logrosVisibles.value)
+})
+
+const mostrandoTodos = computed(() => {
+  if (!talento.value) return false
+  return logrosVisibles.value >= talento.value.logros.length
+})
+
+const toggleLogros = () => {
+  if (!talento.value) return
+  logrosVisibles.value = mostrandoTodos.value
+    ? logrosPorDefecto
+    : talento.value.logros.length
+}
+
+const scrollToInversion = () => {
+  const el = document.getElementById('inversion')
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
 
 const calcularExperiencia = () => {
   if (!talento.value) return 'N/A'
@@ -590,12 +635,10 @@ const getNivelRiesgoLabel = (nivel: string) => {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
-
 .biografia-page {
   min-height: 100vh;
-  background-color: var(--color-bg, #0D0D0D);
-  font-family: 'Inter', 'Manrope', sans-serif;
+  background-color: #0b0b0b;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
   color: #ffffff;
 }
 
@@ -606,13 +649,14 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 .section-title {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 700;
   text-transform: uppercase;
   margin-bottom: 40px;
   position: relative;
   display: inline-block;
+  letter-spacing: 0.05em;
 }
 
 .section-title::after {
@@ -622,7 +666,7 @@ const getNivelRiesgoLabel = (nivel: string) => {
   left: 0;
   width: 60px;
   height: 4px;
-  background: linear-gradient(90deg, #EE2B24, #FF6B6B);
+  background: linear-gradient(90deg, var(--color-primary, #CF2E2E), rgba(207, 46, 46, 0.5));
   border-radius: 2px;
 }
 
@@ -670,7 +714,7 @@ const getNivelRiesgoLabel = (nivel: string) => {
 .deporte-badge {
   display: inline-block;
   padding: 8px 20px;
-  background: linear-gradient(90deg, #EE2B24, #FF6B6B);
+  background: linear-gradient(90deg, var(--color-primary, #CF2E2E), rgba(207, 46, 46, 0.7));
   border-radius: 30px;
   font-size: 0.85rem;
   font-weight: 600;
@@ -680,12 +724,13 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 .nombreAtleta {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: clamp(3rem, 10vw, 6rem);
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   line-height: 1;
   margin: 0 0 10px;
+  letter-spacing: 0.02em;
 }
 
 .alias-deportivo {
@@ -699,29 +744,38 @@ const getNivelRiesgoLabel = (nivel: string) => {
   margin-top: 20px;
 }
 
-.cinturon-badge {
-  display: inline-block;
-  padding: 12px 28px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid #EE2B24;
-  border-radius: 8px;
+.hero-cta {
+  margin-top: 20px;
   font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #EE2B24;
+  padding: 16px 32px;
+}
+
+.hero-cta svg {
+  transition: transform 0.3s ease;
+}
+
+.hero-cta:hover svg {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta svg,
+  .hero-cta:hover svg {
+    transform: none;
+    transition: none;
+  }
 }
 
 /* Quick Stats */
 .quick-stats {
-  background: linear-gradient(180deg, #0D0D0D 0%, #1A1A1A 100%);
+  background: linear-gradient(180deg, #0b0b0b 0%, #151515 100%);
   padding: 40px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 20px;
 }
 
@@ -732,20 +786,43 @@ const getNivelRiesgoLabel = (nivel: string) => {
   padding: 25px 20px;
   text-align: center;
   transition: all 0.3s ease;
+  position: relative;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(207, 46, 46, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .stat-card:hover {
-  background: rgba(238, 43, 36, 0.1);
-  border-color: #EE2B24;
+  background: rgba(207, 46, 46, 0.1);
+  border-color: rgba(207, 46, 46, 0.35);
   transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(207, 46, 46, 0.2);
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card:hover {
+    transform: none;
+  }
 }
 
 .stat-value {
   display: block;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #EE2B24;
+  color: var(--color-primary, #CF2E2E);
   margin-bottom: 8px;
 }
 
@@ -756,10 +833,49 @@ const getNivelRiesgoLabel = (nivel: string) => {
   letter-spacing: 1px;
 }
 
+.timeline-toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.timeline-btn svg {
+  transition: transform 0.3s ease;
+}
+
+/* Vue TransitionGroup */
+.timeline-enter-active,
+.timeline-leave-active {
+  transition: all 0.4s ease;
+}
+
+.timeline-enter-from,
+.timeline-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.timeline-move {
+  transition: transform 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-enter-active,
+  .timeline-leave-active,
+  .timeline-move {
+    transition: none;
+  }
+  .timeline-enter-from,
+  .timeline-leave-to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Biografía Section */
 .biografia-section {
   padding: 80px 0;
-  background: #0D0D0D;
+  background: #0b0b0b;
 }
 
 .bio-content {
@@ -769,8 +885,8 @@ const getNivelRiesgoLabel = (nivel: string) => {
 
 .cita-destacada {
   position: relative;
-  background: linear-gradient(135deg, rgba(238, 43, 36, 0.1), rgba(238, 43, 36, 0.05));
-  border-left: 4px solid #EE2B24;
+  background: linear-gradient(135deg, rgba(207, 46, 46, 0.08), rgba(207, 46, 46, 0.03));
+  border-left: 4px solid var(--color-primary, #CF2E2E);
   padding: 30px 40px;
   margin-bottom: 50px;
   border-radius: 0 12px 12px 0;
@@ -782,12 +898,12 @@ const getNivelRiesgoLabel = (nivel: string) => {
   left: 20px;
   width: 40px;
   height: 40px;
-  color: #EE2B24;
+  color: var(--color-primary, #CF2E2E);
   opacity: 0.5;
 }
 
 .cita-destacada p {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
   font-size: 1.4rem;
   font-weight: 500;
   font-style: italic;
@@ -803,10 +919,10 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 .bio-block h3 {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
-  color: #EE2B24;
+  color: var(--color-primary, #CF2E2E);
   text-transform: uppercase;
   margin-bottom: 15px;
   letter-spacing: 1px;
@@ -821,7 +937,7 @@ const getNivelRiesgoLabel = (nivel: string) => {
 /* Palmares Section */
 .palmares-section {
   padding: 80px 0;
-  background: #1A1A1A;
+  background: #151515;
 }
 
 .timeline {
@@ -837,7 +953,7 @@ const getNivelRiesgoLabel = (nivel: string) => {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, #EE2B24, rgba(238, 43, 36, 0.3));
+  background: linear-gradient(to bottom, var(--color-primary, #CF2E2E), rgba(207, 46, 46, 0.2));
 }
 
 .timeline-item {
@@ -856,8 +972,8 @@ const getNivelRiesgoLabel = (nivel: string) => {
   top: 0;
   width: 26px;
   height: 26px;
-  background: #1A1A1A;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: #151515;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -872,8 +988,8 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 .timeline-item.destacado .timeline-marker {
-  border-color: #EE2B24;
-  background: #EE2B24;
+  border-color: var(--color-primary, #CF2E2E);
+  background: var(--color-primary, #CF2E2E);
 }
 
 .timeline-item.destacado .timeline-marker svg {
@@ -887,20 +1003,44 @@ const getNivelRiesgoLabel = (nivel: string) => {
   border-radius: 12px;
   padding: 20px;
   transition: all 0.3s ease;
+  position: relative;
+}
+
+.timeline-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(207, 46, 46, 0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .timeline-item.destacado .timeline-content {
-  background: linear-gradient(135deg, rgba(238, 43, 36, 0.15), rgba(238, 43, 36, 0.05));
-  border-color: rgba(238, 43, 36, 0.3);
+  background: linear-gradient(135deg, rgba(207, 46, 46, 0.12), rgba(207, 46, 46, 0.04));
+  border-color: rgba(207, 46, 46, 0.25);
 }
 
 .timeline-content:hover {
   transform: translateX(10px);
+  border-color: rgba(207, 46, 46, 0.35);
+  box-shadow: 0 15px 35px rgba(207, 46, 46, 0.15);
+}
+
+.timeline-content:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-content:hover {
+    transform: none;
+  }
 }
 
 .timeline-year {
   display: inline-block;
-  background: #EE2B24;
+  background: var(--color-primary, #CF2E2E);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -909,10 +1049,11 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 .timeline-torneo {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0 0 8px;
+  letter-spacing: 0.02em;
 }
 
 .timeline-posicion {
@@ -952,7 +1093,7 @@ const getNivelRiesgoLabel = (nivel: string) => {
 /* Galería Section */
 .galeria-section {
   padding: 80px 0;
-  background: #0D0D0D;
+  background: #0b0b0b;
 }
 
 .galeria-grid {
@@ -980,6 +1121,12 @@ const getNivelRiesgoLabel = (nivel: string) => {
   transform: scale(1.1);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .galeria-item:hover img {
+    transform: none;
+  }
+}
+
 .galeria-overlay {
   position: absolute;
   inset: 0;
@@ -993,6 +1140,12 @@ const getNivelRiesgoLabel = (nivel: string) => {
 
 .galeria-item:hover .galeria-overlay {
   opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galeria-item .galeria-overlay {
+    opacity: 1;
+  }
 }
 
 .galeria-overlay svg {
@@ -1010,12 +1163,12 @@ const getNivelRiesgoLabel = (nivel: string) => {
 /* Inversión Section */
 .inversion-section {
   padding: 80px 0;
-  background: linear-gradient(180deg, #1A1A1A 0%, #0D0D0D 100%);
+  background: linear-gradient(180deg, #151515 0%, #0b0b0b 100%);
 }
 
 .inversion-card {
-  background: linear-gradient(135deg, rgba(238, 43, 36, 0.1), rgba(30, 30, 30, 1));
-  border: 1px solid rgba(238, 43, 36, 0.3);
+  background: linear-gradient(135deg, rgba(207, 46, 46, 0.08), rgba(21, 21, 21, 1));
+  border: 1px solid rgba(207, 46, 46, 0.2);
   border-radius: 20px;
   padding: 50px;
 }
@@ -1026,10 +1179,11 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 .inversion-header h2 {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 2rem;
   font-weight: 700;
   margin: 0 0 10px;
+  letter-spacing: 0.03em;
 }
 
 .inversion-header p {
@@ -1044,8 +1198,8 @@ const getNivelRiesgoLabel = (nivel: string) => {
   margin: 20px auto 0;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid #EE2B24;
-  box-shadow: 0 0 20px rgba(238, 43, 36, 0.4);
+  border: 3px solid var(--color-primary, #CF2E2E);
+  box-shadow: 0 0 20px rgba(207, 46, 46, 0.35);
 }
 
 .inversion-avatar img {
@@ -1067,25 +1221,50 @@ const getNivelRiesgoLabel = (nivel: string) => {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   transition: all 0.3s ease;
+  position: relative;
+}
+
+.impacto-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(207, 46, 46, 0.1), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .impacto-item:hover {
-  background: rgba(238, 43, 36, 0.1);
+  background: rgba(207, 46, 46, 0.08);
   transform: translateY(-5px);
+  border-color: rgba(207, 46, 46, 0.35);
+  box-shadow: 0 15px 35px rgba(207, 46, 46, 0.2);
+}
+
+.impacto-item:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .impacto-item:hover {
+    transform: none;
+  }
 }
 
 .impacto-item svg {
   width: 50px;
   height: 50px;
-  color: #EE2B24;
+  color: var(--color-primary, #CF2E2E);
   margin-bottom: 20px;
 }
 
 .impacto-item h4 {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0 0 10px;
+  letter-spacing: 0.02em;
 }
 
 .impacto-item p {
@@ -1122,33 +1301,6 @@ const getNivelRiesgoLabel = (nivel: string) => {
 .nivel-riesgo.riesgo-alto {
   background: rgba(244, 67, 54, 0.2);
   color: #F44336;
-}
-
-.btn-invertir {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 40px;
-  background: linear-gradient(90deg, #EE2B24, #FF6B6B);
-  border-radius: 50px;
-  font-family: 'Manrope', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-decoration: none;
-  color: #ffffff;
-  transition: all 0.3s ease;
-}
-
-.btn-invertir:hover {
-  transform: translateX(10px);
-  box-shadow: 0 10px 30px rgba(238, 43, 36, 0.4);
-}
-
-.btn-invertir svg {
-  width: 20px;
-  height: 20px;
 }
 
 /* Social Floating */
@@ -1192,6 +1344,12 @@ const getNivelRiesgoLabel = (nivel: string) => {
   transform: scale(1.1);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .social-btn:hover {
+    transform: none;
+  }
+}
+
 /* Not Found */
 .not-found {
   display: flex;
@@ -1202,9 +1360,10 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 .not-found h2 {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 2rem;
   margin-bottom: 10px;
+  letter-spacing: 0.03em;
 }
 
 .not-found p {
@@ -1212,25 +1371,10 @@ const getNivelRiesgoLabel = (nivel: string) => {
   margin-bottom: 30px;
 }
 
-.btn-volver {
-  display: inline-block;
-  padding: 12px 30px;
-  background: #EE2B24;
-  border-radius: 30px;
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-volver:hover {
-  background: #FF6B6B;
-}
-
 /* Responsive */
 @media (max-width: 1024px) {
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .bio-grid {
@@ -1254,6 +1398,11 @@ const getNivelRiesgoLabel = (nivel: string) => {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+  }
+
+  .hero-cta {
+    font-size: 0.9rem;
+    padding: 14px 24px;
   }
 
   .stat-card {

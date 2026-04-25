@@ -11,9 +11,12 @@
           <div class="image-box">
             <img src="/assets/images/Alcance/Alcance1.webp" alt="Combate" />
           </div>
-          <div class="stat-box">
-            <span class="number">+ {{ formatNumber(stat1) }}</span>
-            <span class="label">ALCANCE</span>
+          <div class="card-body">
+            <span class="athlete-name">Mario Quino</span>
+            <div class="stat-box">
+              <span class="number">+ {{ formatNumber(stat1) }}</span>
+              <span class="label">ALCANCE</span>
+            </div>
           </div>
         </div>
 
@@ -21,9 +24,12 @@
           <div class="image-box">
             <img src="/assets/images/Alcance/Alcance2.webp" alt="Evento" />
           </div>
-          <div class="stat-box">
-            <span class="number">+ {{ formatNumber(stat2) }}</span>
-            <span class="label">VISUALIZACIONES</span>
+          <div class="card-body">
+            <span class="athlete-name">Nathan Fino</span>
+            <div class="stat-box">
+              <span class="number">+ {{ formatNumber(stat2) }}</span>
+              <span class="label">VISUALIZACIONES</span>
+            </div>
           </div>
         </div>
 
@@ -31,9 +37,12 @@
           <div class="image-box">
             <img src="/assets/images/Alcance/Alcance3.webp" alt="Modelo" />
           </div>
-          <div class="stat-box">
-            <span class="number">+ {{ formatNumber(stat3) }}</span>
-            <span class="label">SEGUIDORES</span>
+          <div class="card-body">
+            <span class="athlete-name">Katherine Portt</span>
+            <div class="stat-box">
+              <span class="number">+ {{ formatNumber(stat3) }}</span>
+              <span class="label">SEGUIDORES</span>
+            </div>
           </div>
         </div>
 
@@ -41,9 +50,12 @@
           <div class="image-box">
             <img src="/assets/images/Alcance/Alcance4.webp" alt="Atleta" />
           </div>
-          <div class="stat-box">
-            <span class="number">+ {{ formatNumber(stat4) }}</span>
-            <span class="label">INTERACCIONES CON EL CONTENIDO</span>
+          <div class="card-body">
+            <span class="athlete-name">Camilo Pinzón</span>
+            <div class="stat-box">
+              <span class="number">+ {{ formatNumber(stat4) }}</span>
+              <span class="label">INTERACCIONES CON EL CONTENIDO</span>
+            </div>
           </div>
         </div>
       </div>
@@ -130,14 +142,33 @@ onMounted(() => {
 .alcance-item {
   display: flex;
   flex-direction: column;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.alcance-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .image-box {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: 4px;
-  margin-bottom: 20px;
+  position: relative;
+}
+
+.image-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #EF4444;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .image-box img {
@@ -151,11 +182,30 @@ onMounted(() => {
   transform: scale(1.05);
 }
 
+.card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.athlete-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #EF4444;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
 .stat-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  gap: 6px;
 }
 
 .number {
@@ -163,7 +213,6 @@ onMounted(() => {
   font-size: 2.2rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 5px;
 }
 
 .label {
@@ -177,16 +226,33 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .alcance-grid {
-    grid-template-columns: 1fr;
-    gap: 50px;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding-bottom: 20px;
+    scrollbar-width: none;
   }
-  
+
+  .alcance-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .alcance-item {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+  }
+
   .title {
     font-size: 2.5rem;
   }
-  
+
   .number {
     font-size: 1.8rem;
+  }
+
+  .container {
+    padding: 0 20px;
   }
 }
 </style>
