@@ -58,7 +58,7 @@ const alianzas = [
 
 .background-text {
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Oswald', sans-serif;
@@ -69,7 +69,7 @@ const alianzas = [
   letter-spacing: 0.05em;
   white-space: nowrap;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.4;
   z-index: 1;
   line-height: 1;
 }
@@ -129,7 +129,7 @@ const alianzas = [
   width: auto;
   max-width: 100%;
   filter: grayscale(80%);
-  opacity: 0.6;
+  opacity: 0.9;
   transition: all var(--transition-normal);
 }
 
@@ -138,8 +138,9 @@ const alianzas = [
 }
 
 .alianza-logo:hover img {
-  filter: grayscale(80%);
+  filter: grayscale(0%);
   opacity: 1;
+  transform: scale(1.1);
 }
 
 @media (max-width: 768px) {

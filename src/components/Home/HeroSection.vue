@@ -69,28 +69,10 @@ const slides = [
     description: '5 pasos clave si quieres convertirte en un atleta a tiempo completo'
   },
   {
-    image: '/assets/images/HeroCarrusel/portada-3.webp',
-    subtitle: 'Transforma tu',
-    title: 'Potencial',
-    description: 'Únete a nuestra comunidad de atletas respaldados por sponsors'
-  },
-  {
-    image: '/assets/images/HeroCarrusel/portada-4.webp',
-    subtitle: 'Alcanza el',
-    title: 'Éxito',
-    description: 'Convierte tu pasión deportiva en una carrera profesional exitosa'
-  },
-  {
     image: '/assets/images/HeroCarrusel/portada-5.webp',
-    subtitle: 'Entrena con',
-    title: 'Profesionales',
-    description: 'Los mejores atletas y coaches te ayudan a alcanzar tus metas'
-  },
-  {
-    image: '/assets/images/HeroCarrusel/portada-6.webp',
-    subtitle: 'Únete al',
-    title: 'Equipo',
-    description: 'Sé parte de la comunidad deportiva más grande de Latinoamérica'
+    subtitle: 'Potencia',
+    title: 'tu carrera',
+    description: 'El nuevo mercado de Allevo Corp, que revoluciona la manera de apoyar al talento deportivo'
   }
 ]
 

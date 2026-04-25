@@ -1,7 +1,7 @@
 <template>
   <section class="sistema-sponsors section" id="sistema">
     <div class="container">
-      <h2 class="section-title text-center" v-reveal="'fade-up'">Sponsors Un sistema <span class="text-primary">que
+      <h2 class="section-title text-center" v-reveal="'fade-up'">Sponsors Un sistema<br><span class="text-primary">que
           potencia victorias</span></h2>
 
       <div class="content-wrapper">
