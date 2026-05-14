@@ -12,7 +12,6 @@
             <img src="/assets/images/Alcance/Alcance1.webp" alt="Combate" />
           </div>
           <div class="card-body">
-            <span class="athlete-name">Mario Quino</span>
             <div class="stat-box">
               <span class="number">+ {{ formatNumber(stat1) }}</span>
               <span class="label">ALCANCE</span>
@@ -25,7 +24,6 @@
             <img src="/assets/images/Alcance/Alcance2.webp" alt="Evento" />
           </div>
           <div class="card-body">
-            <span class="athlete-name">Nathan Fino</span>
             <div class="stat-box">
               <span class="number">+ {{ formatNumber(stat2) }}</span>
               <span class="label">VISUALIZACIONES</span>
@@ -38,7 +36,6 @@
             <img src="/assets/images/Alcance/Alcance3.webp" alt="Modelo" />
           </div>
           <div class="card-body">
-            <span class="athlete-name">Katherine Portt</span>
             <div class="stat-box">
               <span class="number">+ {{ formatNumber(stat3) }}</span>
               <span class="label">SEGUIDORES</span>
@@ -51,7 +48,6 @@
             <img src="/assets/images/Alcance/Alcance4.webp" alt="Atleta" />
           </div>
           <div class="card-body">
-            <span class="athlete-name">Camilo Pinzón</span>
             <div class="stat-box">
               <span class="number">+ {{ formatNumber(stat4) }}</span>
               <span class="label">INTERACCIONES CON EL CONTENIDO</span>
@@ -70,10 +66,10 @@ import { useCountUp } from '../../composables/useCountUp'
 const sectionRef = ref<HTMLElement | null>(null)
 const isAnimated = ref(false)
 
-const { currentValue: stat1, start: start1 } = useCountUp(18043461, 2500, { startImmediately: false, decimals: 0 })
-const { currentValue: stat2, start: start2 } = useCountUp(100027729, 2500, { startImmediately: false, decimals: 0 })
-const { currentValue: stat3, start: start3 } = useCountUp(155960, 2500, { startImmediately: false, decimals: 0 })
-const { currentValue: stat4, start: start4 } = useCountUp(5107361, 2500, { startImmediately: false, decimals: 0 })
+const { currentValue: stat1, start: start1 } = useCountUp(20327972, 2500, { startImmediately: false, decimals: 0 })
+const { currentValue: stat2, start: start2 } = useCountUp(141940451, 2500, { startImmediately: false, decimals: 0 })
+const { currentValue: stat3, start: start3 } = useCountUp(3695200, 2500, { startImmediately: false, decimals: 0 })
+const { currentValue: stat4, start: start4 } = useCountUp(6500372, 2500, { startImmediately: false, decimals: 0 })
 
 const formatNumber = (val: number) => {
   return new Intl.NumberFormat('es-GT').format(Math.floor(val))
@@ -159,16 +155,6 @@ onMounted(() => {
   aspect-ratio: 16 / 9;
   overflow: hidden;
   position: relative;
-}
-
-.image-box::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(239, 68, 68, 0.1);
-  border-left: 4px solid #EF4444;
-  pointer-events: none;
-  z-index: 2;
 }
 
 .image-box img {

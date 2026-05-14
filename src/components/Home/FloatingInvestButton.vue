@@ -1,6 +1,7 @@
 <template>
   <div class="fab-container">
-    <button class="fab-button group" @click="onClick">
+    <InversionistaModal ref="inversionistaModalRef" />
+    <button class="fab-button group" @click.stop="handleClick">
       <span class="absolute inset-0 border-2 border-[#CC0000] animate-ping opacity-75 group-hover:hidden"></span>
 
       <span class="icon-wrapper">
@@ -21,9 +22,22 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { ref } from 'vue'
+import InversionistaModal from '../Modales/InversionistaModal.vue'
+
+const props = defineProps<{
   onClick?: () => void;
 }>()
+
+const inversionistaModalRef = ref<InstanceType<typeof InversionistaModal> | null>(null)
+
+const handleClick = () => {
+  if (props.onClick) {
+    props.onClick()
+  } else {
+    inversionistaModalRef.value?.open()
+  }
+}
 </script>
 
 <style scoped>
@@ -31,7 +45,9 @@ defineProps<{
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  z-index: 1000;
+  z-index: 99999;
+  display: block !important;
+  pointer-events: auto;
 }
 
 .fab-button {

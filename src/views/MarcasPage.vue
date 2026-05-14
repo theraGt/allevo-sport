@@ -1,16 +1,15 @@
 <template>
   <ion-page>
-    <AppNavbar />
+    <AppNavbar logoSrc="/assets/images/Alcance/logos-Sponsors-blanco.webp" />
     
     <ion-content :scroll-events="true" id="main-content">
       <MarcasHero />
       <AlcanceSection />
       <SponsorsSection />
-      <AppFooter />
+      <AlianzasSection />
+      <AppFooter logoSrc="/assets/images/Alcance/logos-Sponsors-blanco.webp" />
     </ion-content>
 
-    <FloatingInvestButton @click="openAtletasModal" />
-    <AtletasModal ref="atletasModalRef" />
     <SponsorModal />
   </ion-page>
 </template>
@@ -23,15 +22,9 @@ import AppFooter from '@/components/Home/AppFooter.vue'
 import MarcasHero from '@/components/Marcas/Marcas.vue'
 import AlcanceSection from '@/components/Marcas/Alcance.vue'
 import SponsorsSection from '@/components/Marcas/Sponsors.vue'
-import FloatingInvestButton from '@/components/Home/FloatingInvestButton.vue'
-import AtletasModal from '@/components/Modales/AtletasModal.vue'
+import AlianzasSection from '@/components/Marcas/AlianzasSection.vue'
 import SponsorModal from '@/components/Modales/SponsorModal.vue'
 
-const atletasModalRef = ref<InstanceType<typeof AtletasModal> | null>(null)
-
-const openAtletasModal = () => {
-  atletasModalRef.value?.open()
-}
 </script>
 
 <style scoped>

@@ -10,7 +10,6 @@
         <ion-accordion v-for="faq in faqs" :key="faq.id" :value="faq.id">
           <ion-item slot="header" class="faq-header">
             <ion-label>{{ faq.question }}</ion-label>
-            <ion-icon :icon="chevronDownOutline" slot="end" class="chevron-icon"></ion-icon>
           </ion-item>
           <div class="faq-content" slot="content">
             <p v-html="faq.answer"></p>
@@ -22,8 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonIcon } from '@ionic/vue'
-import { chevronDownOutline } from 'ionicons/icons'
+import { IonAccordion, IonAccordionGroup, IonItem, IonLabel } from '@ionic/vue'
 
 const faqs = [
   {
@@ -124,15 +122,6 @@ ion-item {
 
 ion-item::part(native) {
   background: transparent;
-}
-
-.chevron-icon {
-  color: #9CA3AF;
-  transition: transform 0.3s ease;
-}
-
-ion-accordion.accordion-expanded .chevron-icon {
-  transform: rotate(180deg);
 }
 
 .faq-content {

@@ -23,26 +23,55 @@
         </div>
 
         <nav class="header-nav">
-          <router-link to="/admin/dashboard/overview" class="nav-link"
-            :class="{ active: $route.path.includes('overview') }">
-            PANEL RWA
-          </router-link>
-          <router-link to="/admin/dashboard/atletas" class="nav-link"
-            :class="{ active: $route.path.includes('atletas') }">
-            TALENTOS
-          </router-link>
-          <router-link to="/admin/dashboard/sponsors" class="nav-link"
-            :class="{ active: $route.path.includes('sponsors') }">
-            SPONSORS
-          </router-link>
-          <router-link to="/admin/dashboard/inversionistas" class="nav-link"
-            :class="{ active: $route.path.includes('inversionistas') }">
-            INVERSIONISTAS
-          </router-link>
-          <router-link to="/admin/dashboard/proyectos" class="nav-link"
-            :class="{ active: $route.path.includes('proyectos') }">
-            PROYECTOS
-          </router-link>
+          <button class="nav-scroll-btn nav-scroll-left" @click="scrollNav('left')" :class="{ visible: canScrollLeft }">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+            </svg>
+          </button>
+          <div class="nav-scroll-wrapper" ref="navWrapper">
+            <div class="nav-scroll-content">
+              <router-link to="/admin/dashboard/overview" class="nav-link"
+                :class="{ active: $route.path.includes('overview') }">
+                PANEL RWA
+              </router-link>
+              <router-link to="/admin/dashboard/sponsors" class="nav-link"
+                :class="{ active: $route.path.includes('sponsors') }">
+                SPONSORS
+              </router-link>
+              <router-link to="/admin/dashboard/inversionistas" class="nav-link"
+                :class="{ active: $route.path.includes('inversionistas') }">
+                INVERSIONISTAS
+              </router-link>
+              <router-link to="/admin/dashboard/proyectos" class="nav-link"
+                :class="{ active: $route.path.includes('proyectos') }">
+                PROYECTOS
+              </router-link>
+              <router-link to="/admin/dashboard/atletas" class="nav-link"
+                :class="{ active: $route.path.includes('atletas') && !$route.path.includes('talentos/panel') }">
+                TALENTOS
+              </router-link>
+              <router-link to="/admin/talentos/panel" class="nav-link"
+                :class="{ active: $route.path.includes('talentos/panel') }">
+                TALENTOS PANEL
+              </router-link>
+              <router-link to="/admin/dashboard/noticias" class="nav-link"
+                :class="{ active: $route.path.includes('noticias') }">
+                NOTICIAS
+              </router-link>
+              <router-link to="/admin/dashboard/postulaciones" class="nav-link"
+                :class="{ active: $route.path.includes('postulaciones') }">
+                POSTULACIONES
+              </router-link>
+            </div>
+            <div class="nav-scroll-fade-left" :class="{ visible: canScrollLeft }"></div>
+            <div class="nav-scroll-fade-right" :class="{ visible: canScrollRight }"></div>
+          </div>
+          <button class="nav-scroll-btn nav-scroll-right" @click="scrollNav('right')"
+            :class="{ visible: canScrollRight }">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+            </svg>
+          </button>
         </nav>
 
         <div class="header-right">
@@ -60,7 +89,8 @@
           </button>
           <button class="btn-logout desktop-only" @click="logout">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="16" height="16">
-              <path d="M377.9 105.9L340.7 68.7c-7.5-7.5-19.7-7.5-27.2 0l-25.2 25.2c-7.5 7.5-7.5 19.7 0 27.2l47.1 47.1H224c-13.3 0-24 10.7-24 24v32c0 13.3 10.7 24 24 24h136.6l-47.1 47.1c-7.5 7.5-7.5 19.7 0 27.2l25.2 25.2c7.5 7.5 19.7 7.5 27.2 0l37.2-37.2c7.5-7.5 7.5-19.7 0-27.2zM224 352h-64c-13.3 0-24-10.7-24-24V128c0-13.3 10.7-24 24-24h64c13.3 0 24 10.7 24 24v200c0 13.3-10.7 24-24 24zM160 128c-13.3 0-24-10.7-24-24S146.7 80 160 80h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H160z"/>
+              <path
+                d="M377.9 105.9L340.7 68.7c-7.5-7.5-19.7-7.5-27.2 0l-25.2 25.2c-7.5 7.5-7.5 19.7 0 27.2l47.1 47.1H224c-13.3 0-24 10.7-24 24v32c0 13.3 10.7 24 24 24h136.6l-47.1 47.1c-7.5 7.5-7.5 19.7 0 27.2l25.2 25.2c7.5 7.5 19.7 7.5 27.2 0l37.2-37.2c7.5-7.5 7.5-19.7 0-27.2zM224 352h-64c-13.3 0-24-10.7-24-24V128c0-13.3 10.7-24 24-24h64c13.3 0 24 10.7 24 24v200c0 13.3-10.7 24-24 24zM160 128c-13.3 0-24-10.7-24-24S146.7 80 160 80h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H160z" />
             </svg>
             SALIR
           </button>
@@ -78,15 +108,22 @@
         <nav class="mobile-nav">
           <router-link to="/admin/dashboard/overview" class="mobile-nav-link" @click="closeMenu">PANEL RWA</router-link>
           <router-link to="/admin/dashboard/atletas" class="mobile-nav-link" @click="closeMenu">TALENTOS</router-link>
+          <router-link to="/admin/talentos/panel" class="mobile-nav-link" @click="closeMenu">TALENTOS PANEL</router-link>
           <router-link to="/admin/dashboard/sponsors" class="mobile-nav-link" @click="closeMenu">SPONSORS</router-link>
-          <router-link to="/admin/dashboard/inversionistas" class="mobile-nav-link" @click="closeMenu">INVERSIONISTAS</router-link>
-          <router-link to="/admin/dashboard/proyectos" class="mobile-nav-link" @click="closeMenu">PROYECTOS</router-link>
+          <router-link to="/admin/dashboard/inversionistas" class="mobile-nav-link"
+            @click="closeMenu">INVERSIONISTAS</router-link>
+          <router-link to="/admin/dashboard/proyectos" class="mobile-nav-link"
+            @click="closeMenu">PROYECTOS</router-link>
+          <router-link to="/admin/dashboard/noticias" class="mobile-nav-link" @click="closeMenu">NOTICIAS</router-link>
+          <router-link to="/admin/dashboard/postulaciones" class="mobile-nav-link"
+            @click="closeMenu">POSTULACIONES</router-link>
         </nav>
         <div class="mobile-menu-actions">
           <button class="btn-primary" @click="closeMenu">CONECTAR WALLET</button>
           <button class="btn-logout" @click="handleLogout">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="16" height="16">
-              <path d="M377.9 105.9L340.7 68.7c-7.5-7.5-19.7-7.5-27.2 0l-25.2 25.2c-7.5 7.5-7.5 19.7 0 27.2l47.1 47.1H224c-13.3 0-24 10.7-24 24v32c0 13.3 10.7 24 24 24h136.6l-47.1 47.1c-7.5 7.5-7.5 19.7 0 27.2l25.2 25.2c7.5 7.5 19.7 7.5 27.2 0l37.2-37.2c7.5-7.5 7.5-19.7 0-27.2zM224 352h-64c-13.3 0-24-10.7-24-24V128c0-13.3 10.7-24 24-24h64c13.3 0 24 10.7 24 24v200c0 13.3-10.7 24-24 24zM160 128c-13.3 0-24-10.7-24-24S146.7 80 160 80h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H160z"/>
+              <path
+                d="M377.9 105.9L340.7 68.7c-7.5-7.5-19.7-7.5-27.2 0l-25.2 25.2c-7.5 7.5-7.5 19.7 0 27.2l47.1 47.1H224c-13.3 0-24 10.7-24 24v32c0 13.3 10.7 24 24 24h136.6l-47.1 47.1c-7.5 7.5-7.5 19.7 0 27.2l25.2 25.2c7.5 7.5 19.7 7.5 27.2 0l37.2-37.2c7.5-7.5 7.5-19.7 0-27.2zM224 352h-64c-13.3 0-24-10.7-24-24V128c0-13.3 10.7-24 24-24h64c13.3 0 24 10.7 24 24v200c0 13.3-10.7 24-24 24zM160 128c-13.3 0-24-10.7-24-24S146.7 80 160 80h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H160z" />
             </svg>
             SALIR
           </button>
@@ -101,13 +138,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { tickerData } from '../../../data/adminDashboard'
 
 const router = useRouter()
 const tickerItems = [...tickerData, ...tickerData]
 const isMenuOpen = ref(false)
+const navWrapper = ref<HTMLElement | null>(null)
+const canScrollLeft = ref(false)
+const canScrollRight = ref(false)
+
+const checkNavScroll = () => {
+  if (!navWrapper.value) return
+  const { scrollLeft, scrollWidth, clientWidth } = navWrapper.value
+  canScrollLeft.value = scrollLeft > 0
+  canScrollRight.value = scrollLeft + clientWidth < scrollWidth - 1
+}
+
+const scrollNav = (direction: 'left' | 'right') => {
+  if (!navWrapper.value) return
+  const scrollAmount = 200
+  navWrapper.value.scrollBy({
+    left: direction === 'left' ? -scrollAmount : scrollAmount,
+    behavior: 'smooth'
+  })
+}
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
@@ -125,6 +181,21 @@ const handleLogout = () => {
   closeMenu()
   router.push('/admin/login')
 }
+
+onMounted(() => {
+  checkNavScroll()
+  window.addEventListener('resize', checkNavScroll)
+  if (navWrapper.value) {
+    navWrapper.value.addEventListener('scroll', checkNavScroll)
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkNavScroll)
+  if (navWrapper.value) {
+    navWrapper.value.removeEventListener('scroll', checkNavScroll)
+  }
+})
 </script>
 
 <style scoped>
@@ -139,11 +210,11 @@ const handleLogout = () => {
   overflow: hidden;
 }
 
-.dashboard-layout > .ticker-wrap {
+.dashboard-layout>.ticker-wrap {
   flex-shrink: 0;
 }
 
-.dashboard-layout > .dashboard-header {
+.dashboard-layout>.dashboard-header {
   flex-shrink: 0;
 }
 
@@ -208,8 +279,13 @@ const handleLogout = () => {
 }
 
 @keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .ticker-item {
@@ -223,11 +299,25 @@ const handleLogout = () => {
   flex-shrink: 0;
 }
 
-.ticker-sym { color: #555; }
-.ticker-val { color: #ccc; }
-.ticker-chg.up { color: #00e090; }
-.ticker-chg.down { color: var(--color-primary); }
-.ticker-chg.neutral { color: #888; }
+.ticker-sym {
+  color: #555;
+}
+
+.ticker-val {
+  color: #ccc;
+}
+
+.ticker-chg.up {
+  color: #00e090;
+}
+
+.ticker-chg.down {
+  color: var(--color-primary);
+}
+
+.ticker-chg.neutral {
+  color: #888;
+}
 
 .dashboard-header {
   position: relative;
@@ -296,6 +386,73 @@ const handleLogout = () => {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-scroll-wrapper {
+  flex: 1;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nav-scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-scroll-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.nav-scroll-fade-left,
+.nav-scroll-fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  opacity: 0;
+}
+
+.nav-scroll-fade-left.visible,
+.nav-scroll-fade-right.visible {
+  opacity: 1;
+}
+
+.nav-scroll-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s;
+  flex-shrink: 0;
+}
+
+.nav-scroll-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-scroll-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-primary);
+}
+
+.nav-scroll-btn.visible {
+  display: flex;
 }
 
 .nav-link {
@@ -544,8 +701,8 @@ const handleLogout = () => {
   display: flex;
 }
 
-@media (max-width: 1024px) {
-  .header-nav {
+@media (max-width: 900px) {
+  .desktop-only {
     display: none;
   }
 
@@ -553,62 +710,14 @@ const handleLogout = () => {
     display: flex;
   }
 
-  .desktop-only {
+  .header-nav {
     display: none;
   }
 }
 
-@media (max-width: 768px) {
-  .header-container {
-    padding: 0 16px;
-  }
-
+@media (max-width: 600px) {
   .logo-text {
     display: none;
-  }
-
-  .dashboard-main {
-    padding: 16px;
-  }
-
-  .page-header {
-    margin-bottom: 24px;
-  }
-
-  .title-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 4px;
-  }
-
-  .sep {
-    width: 32px;
-    height: 2px;
-    background: var(--color-primary);
-  }
-
-  .section-label {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--color-primary);
-    font-family: var(--font-heading);
-    font-weight: 700;
-  }
-
-  .page-title {
-    font-family: var(--font-heading);
-    font-weight: 900;
-    font-size: clamp(28px, 4vw, 44px);
-    letter-spacing: 0.04em;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-
-  .title-sub {
-    font-size: 0.55em;
-    color: #2a2a2a;
-    margin-left: 12px;
   }
 }
 </style>

@@ -17,15 +17,22 @@
         </div>
 
         <div class="video-container" v-reveal="'fade-right'">
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/nWVvt7fzVGw?si=34ocGUNQy1qFYYrt&autoplay=1&mute=1"
-            title="YouTube video player" frameborder="0"
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube-nocookie.com/embed/nWVvt7fzVGw?si=34ocGUNQy1qFYYrt&autoplay=1&mute=1&loop=1&playlist=nWVvt7fzVGw&rel=0"
+            title="YouTube video player"
+            frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
         </div>
       </div>
 
       <div class="sistema-cta delay-3" v-reveal="'fade-up'">
-        <button class="btn-primary" @click="() => openModal()">
+        <button class="btn-primary" @click="() => openAtletasModal()">
           Postúlate
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
             <path
@@ -38,9 +45,9 @@
 </template>
 
 <script setup lang="ts">
-import { useModal } from '../../composables/useModal'
+import { useAtletasModal } from '../../composables/useAtletasModal'
 
-const { openModal } = useModal()
+const { openAtletasModal } = useAtletasModal()
 
 const pasos = [
   {

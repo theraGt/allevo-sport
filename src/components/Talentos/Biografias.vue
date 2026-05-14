@@ -8,12 +8,12 @@
       </div>
       <div class="hero-content">
         <span class="deporte-badge">{{ talento.deporte }}</span>
-        <h1 class="nombreAtleta">{{ talento.nombreCompleto }}</h1>
-        <p class="alias-deportivo" v-if="talento.aliasDeportivo">{{ talento.aliasDeportivo }}</p>
+        <h1 class="nombreAtleta">{{ talento.aliasDeportivo }}</h1>
+        <p class="alias-deportivo" v-if="talento.aliasDeportivo">{{ talento.nombreCompleto }}</p>
         <a href="#inversion" class="btn-primary hero-cta" @click.prevent="scrollToInversion">
           Invierte en Mi Carrera
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
           </svg>
         </a>
       </div>
@@ -53,7 +53,8 @@
         <div class="bio-content">
           <blockquote class="cita-destacada">
             <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11 7H7a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2H6v2h1a4 4 0 0 0 4-4V7zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2h-1v2h1a4 4 0 0 0 4-4V7z"/>
+              <path
+                d="M11 7H7a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2H6v2h1a4 4 0 0 0 4-4V7zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2h-1v2h1a4 4 0 0 0 4-4V7z" />
             </svg>
             <p>{{ talento.biografia.cita }}</p>
           </blockquote>
@@ -82,15 +83,12 @@
         <h2 class="section-title">Logros</h2>
         <div class="timeline">
           <TransitionGroup name="timeline">
-            <div 
-              v-for="(logro, index) in logrosMostrados" 
-              :key="index"
-              class="timeline-item"
-              :class="{ destacado: logro.destacado }"
-            >
+            <div v-for="(logro, index) in logrosMostrados" :key="index" class="timeline-item"
+              :class="{ destacado: logro.destacado }">
               <div class="timeline-marker">
                 <svg v-if="logro.destacado" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
               </div>
               <div class="timeline-content">
@@ -107,8 +105,9 @@
         <div class="timeline-toggle" v-if="talento.logros.length > logrosPorDefecto">
           <button class="btn-primary timeline-btn" @click="toggleLogros">
             {{ mostrandoTodos ? 'Ver menos logros' : 'Ver más logros' }}
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" :style="{ transform: mostrandoTodos ? 'rotate(180deg)' : '' }">
-              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"
+              :style="{ transform: mostrandoTodos ? 'rotate(180deg)' : '' }">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
             </svg>
           </button>
         </div>
@@ -120,19 +119,15 @@
       <div class="container">
         <h2 class="section-title">Galería</h2>
         <div class="galeria-grid">
-          <div 
-            v-for="(item, index) in talento.galeria" 
-            :key="index"
-            class="galeria-item"
-            :class="{ 'es-video': item.tipo === 'video' }"
-          >
+          <div v-for="(item, index) in talento.galeria" :key="index" class="galeria-item"
+            :class="{ 'es-video': item.tipo === 'video' }">
             <img v-if="item.tipo === 'imagen'" :src="item.url" :alt="talento.nombreCompleto" />
             <div v-else class="video-container">
               <video :src="item.url" controls :poster="item.thumbnail"></video>
             </div>
             <div class="galeria-overlay" v-if="item.tipo === 'video'">
               <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z"/>
+                <path d="M8 5v14l11-7z" />
               </svg>
             </div>
           </div>
@@ -155,21 +150,24 @@
             <div class="impacto-grid">
               <div class="impacto-item">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                 </svg>
                 <h4>Viajes Internacionales</h4>
                 <p>Participación en competencias alrededor del mundo</p>
               </div>
               <div class="impacto-item">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+                  <path
+                    d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
                 </svg>
                 <h4>Equipo Profesional</h4>
                 <p>Equipamiento de alta gama para entrenamiento</p>
               </div>
               <div class="impacto-item">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                  <path
+                    d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
                 </svg>
                 <h4>Suplementación</h4>
                 <p>Nutrición deportiva para máximo rendimiento</p>
@@ -182,7 +180,7 @@
               <a href="#contacto" class="btn-primary">
                 Invierte en Mi Carrera
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                  <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
                 </svg>
               </a>
             </div>
@@ -193,14 +191,18 @@
 
     <!-- Redes Sociales Flotantes -->
     <div class="social-floating">
-      <a v-if="talento.redesSociales.instagram" :href="talento.redesSociales.instagram" target="_blank" class="social-btn instagram">
+      <a v-if="talento.redesSociales.instagram" :href="talento.redesSociales.instagram" target="_blank"
+        class="social-btn instagram">
         <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          <path
+            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
         </svg>
       </a>
-      <a v-if="talento.redesSociales.tiktok" :href="talento.redesSociales.tiktok" target="_blank" class="social-btn tiktok">
+      <a v-if="talento.redesSociales.tiktok" :href="talento.redesSociales.tiktok" target="_blank"
+        class="social-btn tiktok">
         <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+          <path
+            d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
         </svg>
       </a>
     </div>
@@ -694,12 +696,10 @@ const getNivelRiesgoLabel = (nivel: string) => {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.6) 40%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.6) 40%,
+      rgba(0, 0, 0, 0.3) 100%);
 }
 
 .hero-content {
@@ -759,6 +759,7 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .hero-cta svg,
   .hero-cta:hover svg {
     transform: none;
@@ -860,11 +861,13 @@ const getNivelRiesgoLabel = (nivel: string) => {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .timeline-enter-active,
   .timeline-leave-active,
   .timeline-move {
     transition: none;
   }
+
   .timeline-enter-from,
   .timeline-leave-to {
     opacity: 1;

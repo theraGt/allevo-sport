@@ -8,6 +8,7 @@ import BiografiasPage from '../views/BiografiasPage.vue'
 import NoticiasPage from '../views/NoticiasPage.vue'
 import JoinEcosystem from '../views/JoinEcosystem.vue'
 import ContactoPage from '../views/ContactoPage.vue'
+import ProyectosPage from '../views/Proyectos.vue'
 import TerminosPage from '../views/TerminosPage.vue'
 import PrivacidadPage from '../views/PrivacidadPage.vue'
 import Login from '../components/Admin/Login.vue'
@@ -17,6 +18,9 @@ import AtletasDashboard from '../views/Admin/AtletasDashboard.vue'
 import SponsorsDashboard from '../views/Admin/SponsorsDashboard.vue'
 import InversionistasDashboard from '../views/Admin/InversionistasDashboard.vue'
 import ProyectosDashboard from '../views/Admin/ProyectosDashboard.vue'
+import PostulacionesDashboardView from '../views/Admin/PostulacionesDashboardView.vue'
+import NoticiasDashboardView from '../views/Admin/NoticiasDashboardView.vue'
+import TalentPanel from '../views/Front/TalentPanel.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -52,6 +56,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/se-parte',
     name: 'JoinEcosystem',
     component: JoinEcosystem
+  },
+  {
+    path: '/proyectos',
+    name: 'Proyectos',
+    component: ProyectosPage
   },
   {
     path: '/contacto',
@@ -106,11 +115,45 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin/dashboard/proyectos',
     name: 'ProyectosDashboard',
     component: ProyectosDashboard
+  },
+  {
+    path: '/admin/dashboard/noticias',
+    redirect: '/admin/dashboard/noticias/bandeja'
+  },
+  {
+    path: '/admin/dashboard/noticias/bandeja',
+    name: 'NoticiasBandeja',
+    component: NoticiasDashboardView
+  },
+  {
+    path: '/admin/dashboard/noticias/editor',
+    name: 'NoticiasEditor',
+    component: NoticiasDashboardView
+  },
+  {
+    path: '/admin/dashboard/noticias/editor/:id',
+    name: 'NoticiasEditorEdit',
+    component: NoticiasDashboardView
+  },
+  {
+    path: '/admin/dashboard/noticias/publicados',
+    name: 'NoticiasPublicados',
+    component: NoticiasDashboardView
+  },
+  {
+    path: '/admin/dashboard/postulaciones',
+    name: 'PostulacionesDashboard',
+    component: PostulacionesDashboardView
+  },
+  {
+    path: '/admin/talentos/panel',
+    name: 'TalentPanel',
+    component: TalentPanel
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL || '/'),
   routes
 })
 

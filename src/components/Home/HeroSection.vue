@@ -28,7 +28,7 @@
       </div>
 
       <div class="reveal-wrapper delay-5" v-reveal="'scale-in-spring'">
-        <button class="btn-primary hero-cta" @click="() => openModal()">
+        <button class="btn-primary hero-cta" @click="() => openAtletasModal()">
           Ser un Talento
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
             <path
@@ -47,13 +47,13 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue'
-import { useModal } from '../../composables/useModal'
+import { useAtletasModal } from '../../composables/useAtletasModal'
 
 const props = defineProps<{
   scrollY?: number
 }>()
 
-const { openModal } = useModal()
+const { openAtletasModal } = useAtletasModal()
 
 const slides = [
   {

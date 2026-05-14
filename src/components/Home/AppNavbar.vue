@@ -7,7 +7,7 @@
       <!-- Logo -->
       <div class="navbar-logo">
         <a href="/" @click.prevent="navigateTo('/')">
-          <img src="/assets/images/logo-alevo.webp" alt="Allevo Sports" />
+          <img :src="props.logoSrc || defaultLogo" alt="Allevo Sports" :class="{ 'logo-custom': props.logoSrc }" />
         </a>
       </div>
 
@@ -27,16 +27,21 @@
               <div class="dropdown-arrow-icon"></div>
               <router-link v-for="item in talentosItems" :key="item.path" :to="item.path" class="dropdown-item"
                 @click="closeDropdown">
-                <ion-icon :icon="item.icon" class="dropdown-item-icon"></ion-icon>
+                <ion-icon :icon="item.icon || peopleOutline" class="dropdown-item-icon"></ion-icon>
                 <span>{{ item.label }}</span>
               </router-link>
             </div>
           </transition>
         </div>
 
+        <router-link to="/proyectos" class="nav-link" :class="{ active: isActive('/proyectos') }">
+          Proyectos
+        </router-link>
+
         <router-link v-for="link in navLinks" :key="link.path" :to="link.path" class="nav-link"
           :class="{ active: isActive(link.path) }">
-          {{ link.label }}
+          <img v-if="link.path === '/marcas'" src="/assets/images/Alcance/logos-Sponsors-blanco.webp" alt="Marcas" class="nav-logo-marcas" />
+          <template v-else>{{ link.label }}</template>
         </router-link>
       </nav>
 
@@ -82,6 +87,12 @@ import {
 } from 'ionicons/icons'
 import { useAtletasModal } from '../../composables/useAtletasModal'
 
+const props = defineProps<{
+  logoSrc?: string
+}>()
+
+const defaultLogo = '/assets/images/logo-alevo.webp'
+
 const router = useRouter()
 const route = useRoute()
 const { openAtletasModal } = useAtletasModal()
@@ -96,9 +107,8 @@ const dropdownRef = ref<HTMLElement | null>(null)
 const navLinks = [
   { path: '/noticias', label: 'Noticias' },
   { path: '/sistema', label: 'Sistema' },
-  { path: '/marcas', label: 'Marcas' },
-  { path: '/se-parte', label: 'Sé parte' },
-  { path: '/contacto', label: 'Contacto' }
+  { path: '/contacto', label: 'Contacto' },
+  { path: '/marcas', label: 'Marcas' }
 ]
 
 const talentosItems = [
@@ -229,6 +239,11 @@ onUnmounted(() => {
   filter: brightness(1.05);
 }
 
+.navbar-logo img.logo-custom {
+  height: 60px;
+  object-fit: contain;
+}
+
 .navbar-logo a:hover img {
   transform: scale(1.05);
   filter: brightness(1.15);
@@ -289,6 +304,20 @@ onUnmounted(() => {
 .nav-link.active::after {
   width: 60%;
   left: 50%;
+}
+
+.nav-link img.nav-logo-marcas {
+  height: 28px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  filter: brightness(1.05);
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.nav-link:hover img.nav-logo-marcas {
+  transform: scale(1.05);
+  filter: brightness(1.15);
 }
 
 /* ─── Dropdown ──────────────────────────────────────────────── */

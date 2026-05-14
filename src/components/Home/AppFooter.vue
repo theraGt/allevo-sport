@@ -6,7 +6,7 @@
         <div class="footer-brand">
           <div class="logo">
             <a href="/">
-              <img src="/assets/images/logo-alevo.webp" alt="Allevo Sports" />
+              <img :src="props.logoSrc || defaultLogo" alt="Allevo Sports" :class="{ 'logo-custom': props.logoSrc }" />
             </a>
           </div>
           <p class="tagline">Potenciando el éxito deportivo</p>
@@ -91,6 +91,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
+const props = defineProps<{
+  logoSrc?: string
+}>()
+
+const defaultLogo = '/assets/images/logo-alevo.webp'
+
 const email = ref('')
 const currentYear = computed(() => new Date().getFullYear())
 
@@ -132,10 +138,15 @@ const subscribeNewsletter = () => {
 }
 
 .logo img {
-  height: 120px; /* Reducido de 180px para evitar overflow masivo */
+  height: 120px;
   width: auto;
   position: relative;
   margin-bottom: 20px;
+}
+
+.logo img.logo-custom {
+  height: 60px;
+  object-fit: contain;
 }
 
 .tagline {

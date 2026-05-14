@@ -6,7 +6,7 @@
         <div class="bg-gradient"></div>
         <div class="bg-particles"></div>
       </div>
-      
+
       <div class="contacto-container">
         <header class="contacto-header" v-reveal="'slide-up'">
           <span class="header-badge">
@@ -24,15 +24,16 @@
               <div class="card-glow"></div>
               <div class="info-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
               </div>
               <h3>WhatsApp</h3>
-              <p>+502 1234 5678</p>
-              <a href="https://wa.me/50212345678" target="_blank" class="contact-link">
+              <p>+502 2315 9708</p>
+              <a href="https://wa.me/50223159708" target="_blank" class="contact-link">
                 Enviar mensaje
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
               </a>
             </div>
@@ -41,8 +42,8 @@
               <div class="card-glow"></div>
               <div class="info-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22,6 12,13 2,6"/>
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
                 </svg>
               </div>
               <h3>Email</h3>
@@ -50,7 +51,7 @@
               <a href="mailto:soporte@alevosport.com" class="contact-link">
                 Enviar correo
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
               </a>
             </div>
@@ -59,8 +60,8 @@
               <div class="card-glow"></div>
               <div class="info-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
                 </svg>
               </div>
               <h3>Ubicación</h3>
@@ -68,7 +69,7 @@
               <span class="contact-link">
                 Citas presenciales
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
               </span>
             </div>
@@ -76,21 +77,23 @@
             <div class="social-section" v-reveal="'slide-up'" :style="{ '--delay': '0.4s' }">
               <h4>Síguenos</h4>
               <div class="social-icons">
-                <a href="https://instagram.com/alevosport" target="_blank" class="social-icon social-hover-effect">
+                <a href="https://www.instagram.com/allevo_sports/" target="_blank"
+                  class="social-icon social-hover-effect">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                   </svg>
                 </a>
-                <a href="https://facebook.com/alevosport" target="_blank" class="social-icon social-hover-effect">
+                <a href="https://www.facebook.com/allevosports" target="_blank" class="social-icon social-hover-effect">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                   </svg>
                 </a>
-                <a href="https://tiktok.com/@alevosport" target="_blank" class="social-icon social-hover-effect">
+                <a href="https://www.tiktok.com/@allevo_sports" target="_blank" class="social-icon social-hover-effect">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    <path
+                      d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
                   </svg>
                 </a>
               </div>
@@ -102,47 +105,30 @@
               <h3>
                 <span class="title-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
                 </span>
                 ENVÍANOS UN MENSAJE
               </h3>
-              
+
               <div class="form-group">
                 <label for="contacto-nombre">Nombre</label>
-                <input 
-                  id="contacto-nombre"
-                  type="text" 
-                  v-model="form.nombre" 
-                  placeholder="Tu nombre completo" 
-                  autocomplete="name"
-                  required 
-                />
+                <input id="contacto-nombre" type="text" v-model="form.nombre" placeholder="Tu nombre completo"
+                  autocomplete="name" required />
               </div>
-              
+
               <div class="form-group">
                 <label for="contacto-email">Email</label>
-                <input 
-                  id="contacto-email"
-                  type="email" 
-                  v-model="form.email" 
-                  placeholder="tu@email.com" 
-                  autocomplete="email"
-                  required 
-                />
+                <input id="contacto-email" type="email" v-model="form.email" placeholder="tu@email.com"
+                  autocomplete="email" required />
               </div>
-              
+
               <div class="form-group">
                 <label for="contacto-telefono">Teléfono</label>
-                <input 
-                  id="contacto-telefono"
-                  type="tel" 
-                  v-model="form.telefono" 
-                  placeholder="+502 0000 0000" 
-                  autocomplete="tel"
-                />
+                <input id="contacto-telefono" type="tel" v-model="form.telefono" placeholder="+50223159708"
+                  autocomplete="tel" />
               </div>
-              
+
               <div class="form-group">
                 <label for="contacto-asunto">Asunto</label>
                 <select id="contacto-asunto" v-model="form.asunto" required>
@@ -154,38 +140,73 @@
                   <option value="otro">Otro</option>
                 </select>
               </div>
-              
+
               <div class="form-group">
                 <label for="contacto-mensaje">Mensaje</label>
-                <textarea 
-                  id="contacto-mensaje"
-                  v-model="form.mensaje" 
-                  placeholder="¿En qué podemos ayudarte?" 
-                  rows="5" 
-                  required
-                ></textarea>
+                <textarea id="contacto-mensaje" v-model="form.mensaje" placeholder="¿En qué podemos ayudarte?" rows="5"
+                  required></textarea>
               </div>
-              
+
               <button type="submit" class="btn-primary">
                 <span>ENVIAR MENSAJE</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
                 </svg>
               </button>
             </form>
           </div>
         </div>
       </div>
+
+      <!-- Join Ecosystem Section -->
+      <div class="join-ecosystem-section">
+        <JoinTabs :active-role="activeRole" @update:active-role="activeRole = $event"
+          @show-email-form="showEmailForm = true" />
+
+        <div v-if="showEmailForm" class="forms-section">
+          <div class="forms-container">
+            <button class="back-btn" @click="showEmailForm = false">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              Volver a opciones de registro
+            </button>
+            <Transition name="fade-slide" mode="out-in">
+              <component :is="formComponents[activeRole]" :key="activeRole" />
+            </Transition>
+          </div>
+        </div>
+
+        <TrustSignals />
+
+        <JoinFAQ />
+      </div>
+
       <AppFooter />
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref, markRaw } from 'vue'
 import { IonContent, IonPage } from '@ionic/vue'
 import AppNavbar from '@/components/Home/AppNavbar.vue'
 import AppFooter from '@/components/Home/AppFooter.vue'
+import JoinTabs from '@/components/JoinEcosystem/JoinTabs.vue'
+import JoinFAQ from '@/components/JoinEcosystem/JoinFAQ.vue'
+import TrustSignals from '@/components/JoinEcosystem/TrustSignals.vue'
+import InvestorForm from '@/components/JoinEcosystem/InvestorForm.vue'
+import TalentForm from '@/components/JoinEcosystem/TalentForm.vue'
+import AllyForm from '@/components/JoinEcosystem/AllyForm.vue'
+
+const activeRole = ref<'inversionista' | 'talento' | 'aliado'>('inversionista')
+const showEmailForm = ref(false)
+
+const formComponents = {
+  inversionista: markRaw(InvestorForm),
+  talento: markRaw(TalentForm),
+  aliado: markRaw(AllyForm)
+}
 
 const form = reactive({
   nombre: '',
@@ -221,7 +242,7 @@ const handleSubmit = () => {
 .bg-gradient {
   position: absolute;
   inset: 0;
-  background: 
+  background:
     radial-gradient(ellipse 80% 50% at 50% -20%, rgba(207, 46, 46, 0.12), transparent),
     radial-gradient(ellipse 60% 40% at 90% 30%, rgba(207, 46, 46, 0.06), transparent),
     linear-gradient(180deg, #0b0b0b 0%, #0f0f0f 100%);
@@ -230,7 +251,7 @@ const handleSubmit = () => {
 .bg-particles {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     radial-gradient(circle at 15% 25%, rgba(207, 46, 46, 0.08) 0%, transparent 1%),
     radial-gradient(circle at 85% 65%, rgba(207, 46, 46, 0.06) 0%, transparent 1%),
     radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.015) 0%, transparent 1%);
@@ -596,7 +617,7 @@ const handleSubmit = () => {
     grid-template-columns: 1fr;
     gap: 32px;
   }
-  
+
   .contacto-info {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -607,21 +628,102 @@ const handleSubmit = () => {
   .contacto-container {
     padding: 100px 16px 60px;
   }
-  
+
   .contacto-form-wrapper {
     padding: 28px 20px;
   }
-  
+
   .contacto-header {
     margin-bottom: 40px;
   }
-  
+
   .info-card {
     padding: 20px;
   }
-  
+
   .social-section {
     padding: 20px;
+  }
+}
+
+/* ─── Join Ecosystem Section ─── */
+.join-ecosystem-section {
+  position: relative;
+  z-index: 1;
+  padding: 60px 20px 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 40px;
+}
+
+.join-ecosystem-section .forms-section {
+  padding: 0 20px 60px;
+}
+
+.join-ecosystem-section .forms-container {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.join-ecosystem-section .back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #9CA3AF;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.join-ecosystem-section .back-btn:hover {
+  color: #CF2E2E;
+}
+
+.join-ecosystem-section .back-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.join-ecosystem-section .back-btn:hover svg {
+  transform: translateX(-4px);
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateX(30px) scale(0.95);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30px) scale(0.95);
+}
+
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+@media (max-width: 768px) {
+  .join-ecosystem-section {
+    padding: 40px 16px 30px;
+  }
+
+  .join-ecosystem-section .forms-section {
+    padding: 0 16px 50px;
+  }
+
+  .join-ecosystem-section .forms-container {
+    max-width: 100%;
   }
 }
 </style>

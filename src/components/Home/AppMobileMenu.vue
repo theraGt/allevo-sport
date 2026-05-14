@@ -21,7 +21,7 @@
               :class="{ active: isActive(link.path), 'has-submenu': link.children }"
               @click="link.children ? toggleTalentos() : closeMenu()" :style="{ animationDelay: (index * 40) + 'ms' }">
               <div class="mobile-link-main">
-                <ion-icon :icon="link.icon" class="mobile-link-icon"></ion-icon>
+                <ion-icon :icon="link.icon || homeOutline" class="mobile-link-icon"></ion-icon>
                 <span>{{ link.label }}</span>
               </div>
               <ion-icon v-if="link.children" :icon="chevronDownOutline" class="mobile-link-arrow"
@@ -33,7 +33,7 @@
               <div class="mobile-submenu" v-show="showTalentos">
                 <router-link v-for="(item, idx) in talentosItems" :key="item.path" :to="item.path" class="sub-link"
                   @click="closeMenu" :style="{ animationDelay: (idx * 30) + 'ms' }">
-                  <ion-icon :icon="item.icon" class="sub-link-icon"></ion-icon>
+                  <ion-icon :icon="item.icon || peopleOutline" class="sub-link-icon"></ion-icon>
                   {{ item.label }}
                 </router-link>
               </div>
@@ -113,7 +113,6 @@ const mobileLinks = [
   { path: '/noticias', label: 'Noticias', icon: newspaperOutline },
   { path: '/sistema', label: 'Sistema', icon: settingsOutline },
   { path: '/marcas', label: 'Marcas', icon: businessOutline },
-  { path: '/se-parte', label: 'Sé parte', icon: personAddOutline },
   { path: '/contacto', label: 'Contacto', icon: mailOutline }
 ]
 

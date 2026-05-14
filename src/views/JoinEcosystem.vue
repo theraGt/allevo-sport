@@ -7,8 +7,6 @@
         <div class="bg-gradient"></div>
       </div>
 
-      <EcosystemHero />
-
       <JoinTabs
         :active-role="activeRole"
         @update:active-role="activeRole = $event"
@@ -45,7 +43,6 @@ import { IonContent, IonPage, IonIcon } from '@ionic/vue'
 import { arrowBackOutline } from 'ionicons/icons'
 import AppNavbar from '@/components/Home/AppNavbar.vue'
 import AppFooter from '@/components/Home/AppFooter.vue'
-import EcosystemHero from '@/components/JoinEcosystem/EcosystemHero.vue'
 import JoinTabs from '@/components/JoinEcosystem/JoinTabs.vue'
 import JoinFAQ from '@/components/JoinEcosystem/JoinFAQ.vue'
 import TrustSignals from '@/components/JoinEcosystem/TrustSignals.vue'

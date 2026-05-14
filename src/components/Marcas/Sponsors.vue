@@ -242,16 +242,6 @@ const handleSponsorClick = () => {
   transition: transform 0.6s ease;
 }
 
-.image-wrapper::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(239, 68, 68, 0.1);
-  border-left: 4px solid #EF4444;
-  pointer-events: none;
-  z-index: 2;
-}
-
 .image-overlay {
   position: absolute;
   inset: 0;

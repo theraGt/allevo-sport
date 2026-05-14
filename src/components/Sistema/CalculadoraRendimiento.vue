@@ -138,13 +138,13 @@
 
       <!-- CTA -->
       <div class="cta-wrapper" v-reveal="'scale-in-spring'">
-        <button class="btn-primary cta-btn" @click="onNotifyClick">
+        <button class="btn-primary cta-btn" @click="openInversionistaModal">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
           </svg>
-          CONVERTIRSE EN INVERSOR
+          QUIERO SER INVERSIONISTA
         </button>
       </div>
     </div>
@@ -174,10 +174,11 @@ import {
   timeOutline,
   calendarOutline
 } from 'ionicons/icons'
+import { useInversionistaModal } from '../../composables/useInversionistaModal'
 
 /* ─── Constantes ─── */
 const MIN_MONTO = 1000
-const MAX_MONTO = 500000
+const MAX_MONTO = 100000
 const STEP_MONTO = 1000
 
 const tasaOpciones = [1, 1.5, 2, 2.5, 3]
@@ -188,9 +189,11 @@ const inputMonto = ref<number>(10000)
 const tasa = ref<number>(2) // 2% mensual por defecto
 const tasaAnual = computed(() => Number((tasa.value * 12).toFixed(1)))
 const projectionYears = [1, 2, 3, 4, 5]
-const presets = [1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000]
+const presets = [1000, 3000, 5000, 7000, 9000, 20000, 40000, 60000, 80000,]
 
 const montoInputRef = ref<HTMLInputElement | null>(null)
+
+const { openInversionistaModal: openInversionistaModal } = useInversionistaModal()
 
 /* ─── Debounce input ─── */
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
@@ -342,17 +345,11 @@ watch(
 
 /* ─── Estilo del indicador circular ─── */
 const circleStyle = computed(() => {
-  // Mapear tasa 1%-3% a 0%-100% del círculo
   const pct = Math.min(((tasa.value - 1) / 2) * 100, 100)
   return {
     background: `conic-gradient(var(--color-primary) 0% ${pct}%, rgba(255,255,255,0.08) ${pct}% 100%)`
   }
 })
-
-/* ─── CTA ─── */
-const onNotifyClick = () => {
-  window.dispatchEvent(new CustomEvent('open-investor-modal'))
-}
 </script>
 
 <style scoped>
