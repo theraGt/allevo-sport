@@ -41,13 +41,14 @@ const queries = {
     delete_inversionista: `DELETE FROM allevo.inversionistas WHERE id=$1`,
 
     // ---- USUARIOS ----
-    get_usuarios: `SELECT id, nombre, apellido, email, rol, activo, created_at FROM allevo.usuarios ORDER BY id ASC`,
-    get_usuario_by_id: `SELECT id, nombre, apellido, email, rol, activo, created_at FROM allevo.usuarios WHERE id = $1`,
+    get_usuarios: `SELECT id, email, tipo_usuario, nombres, apellidos, telefono, pais, ciudad, fecha_nacimiento, genero, verificado, activo, ultimo_acceso, created_at, updated_at FROM allevo.usuarios ORDER BY id ASC`,
+    get_usuario_by_id: `SELECT id, email, tipo_usuario, nombres, apellidos, telefono, pais, ciudad, fecha_nacimiento, genero, verificado, activo, ultimo_acceso, created_at, updated_at FROM allevo.usuarios WHERE id = $1`,
     get_usuario_by_email: `SELECT * FROM allevo.usuarios WHERE email = $1`,
-    create_usuario: `INSERT INTO allevo.usuarios (nombre, apellido, email, password, rol, activo)
-                              VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`,
-    update_usuario: `UPDATE allevo.usuarios SET nombre=$1, apellido=$2, email=$3, rol=$4, activo=$5
-                              WHERE id=$6 RETURNING id`,
+    get_usuario_by_email_public: `SELECT id, email, tipo_usuario, nombres, apellidos, telefono, pais, ciudad, fecha_nacimiento, genero, verificado, activo, ultimo_acceso, created_at, updated_at FROM allevo.usuarios WHERE email = $1`,
+    create_usuario: `INSERT INTO allevo.usuarios (nombres, apellidos, email, password_hash, tipo_usuario, telefono, pais, ciudad, fecha_nacimiento, genero, verificado, activo)
+                              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING id`,
+    update_usuario: `UPDATE allevo.usuarios SET nombres=$1, apellidos=$2, email=$3, tipo_usuario=$4, telefono=$5, pais=$6, ciudad=$7, fecha_nacimiento=$8, genero=$9, activo=$10
+                              WHERE id=$11 RETURNING id`,
     delete_usuario: `DELETE FROM allevo.usuarios WHERE id=$1`,
 
     // ---- AUTH ----

@@ -47,6 +47,33 @@ export const getUsuarioById = async (req, res) => {
     }
 };
 
+// GET /api/usuarios/by-email?email=...
+export const getUsuarioByEmail = async (req, res) => {
+    let client;
+    try {
+        CORS_HEADERS(res);
+        const pool = await getConnection();
+        client = await pool.connect();
+        const { email } = req.query;
+        
+        if (!email) {
+            return res.status(400).json({ message: 'Email es requerido' });
+        }
+        
+        const result = await client.query(queries.get_usuario_by_email_public, [email]);
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+    } catch (err) {
+        console.error('Error en getUsuarioByEmail:', err);
+        res.status(500).json({ message: 'Error del servidor', error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+};
+
 // POST /api/usuarios  — hashea el password antes de guardar
 export const createUsuario = async (req, res) => {
     let client;

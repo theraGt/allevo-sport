@@ -67,8 +67,21 @@ export const register = async (req, res) => {
     let client;
     try {
         res.setHeader('Access-Control-Allow-Origin', '*');
-        const { nombre, apellido, email, password, rol } = req.body;
-        if (!nombre || !email || !password) return res.status(400).json({ message: 'Nombre, email y contraseña son requeridos' });
+        
+        const { 
+            nombres, 
+            apellidos, 
+            email, 
+            password, 
+            telefono, 
+            pais, 
+            ciudad, 
+            fecha_nacimiento, 
+            genero,
+            tipo_usuario 
+        } = req.body;
+        
+        if (!nombres || !email || !password) return res.status(400).json({ message: 'Nombre, email y contraseña son requeridos' });
 
         const pool = await getConnection();
         client = await pool.connect();
@@ -77,10 +90,33 @@ export const register = async (req, res) => {
         if (existing.rows.length > 0) return res.status(409).json({ message: 'El email ya está registrado' });
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const result = await client.query(queries.create_usuario, [nombre, apellido || '', email, hashedPassword, rol || 'usuario', true]);
-        const token = jwt.sign({ id: result.rows[0].id, email, rol: rol || 'usuario' }, config.jwtSecret, { expiresIn: config.jwtExpires });
+        const result = await client.query(queries.create_usuario, [
+            nombres,
+            apellidos || '',
+            email,
+            hashedPassword,
+            tipo_usuario || 'inversionista',
+            telefono || null,
+            pais || 'Guatemala',
+            ciudad || null,
+            fecha_nacimiento || null,
+            genero || null,
+            false,  // verificado
+            true    // activo
+        ]);
+        
+        const token = jwt.sign({ id: result.rows[0].id, email, rol: tipo_usuario || 'inversionista' }, config.jwtSecret, { expiresIn: config.jwtExpires });
 
-        res.status(201).json({ message: 'Usuario registrado correctamente', token, user: { id: result.rows[0].id, nombre, email, rol: rol || 'usuario' } });
+        res.status(201).json({ 
+            message: 'Usuario registrado correctamente', 
+            token, 
+            user: { 
+                id: result.rows[0].id, 
+                nombres, 
+                email, 
+                tipo_usuario: tipo_usuario || 'inversionista' 
+            } 
+        });
     } catch (err) {
         console.error('Error en register:', err);
         res.status(500).json({ message: 'Error del servidor', error: err.message });
