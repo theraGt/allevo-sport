@@ -158,6 +158,10 @@
         </div>
       </div>
 
+      <TrustSignals />
+
+      <JoinFAQ />
+
       <!-- Join Ecosystem Section -->
       <div class="join-ecosystem-section">
         <JoinTabs :active-role="activeRole" @update:active-role="activeRole = $event"
@@ -176,10 +180,6 @@
             </Transition>
           </div>
         </div>
-
-        <TrustSignals />
-
-        <JoinFAQ />
       </div>
 
       <AppFooter />

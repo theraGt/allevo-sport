@@ -3,14 +3,15 @@
     <div class="success-content">
       <div class="success-icon">
         <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="#00e090" stroke-width="2"/>
-          <path d="M8 12l2.5 2.5L16 9" stroke="#00e090" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="10" stroke="#00e090" stroke-width="2" />
+          <path d="M8 12l2.5 2.5L16 9" stroke="#00e090" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </div>
-      
+
       <h2 class="success-title">¡BIENVENIDO AL ECOSISTEMA!</h2>
-      <p class="success-message">Tu cuenta está en revisión. Mientras tanto, explora lo que puedes hacer:</p>
-      
+      <p class="success-message">{{ email ? `Tu cuenta (${email}) está en revisión.` : 'Tu cuenta está en revisión.' }} Mientras tanto, explora lo que puedes hacer:</p>
+
       <div class="success-actions">
         <div class="action-card" v-for="action in contextualActions" :key="action.title">
           <div class="action-icon" v-html="action.icon"></div>
@@ -19,21 +20,21 @@
           <a :href="action.link" class="action-btn">{{ action.cta }}</a>
         </div>
       </div>
-      
+
       <div class="share-section">
         <p class="share-title">¿Conoces a alguien que debería unirse?</p>
         <button class="share-btn" @click="shareApp">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="18" cy="5" r="3"/>
-            <circle cx="6" cy="12" r="3"/>
-            <circle cx="18" cy="19" r="3"/>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            <circle cx="18" cy="5" r="3" />
+            <circle cx="6" cy="12" r="3" />
+            <circle cx="18" cy="19" r="3" />
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
           </svg>
           Invitar a un amigo <span class="points-badge">+50 pts</span>
         </button>
       </div>
-      
+
       <button class="close-btn" @click="$emit('close')">
         Ir al inicio
       </button>
@@ -46,6 +47,7 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   role: 'inversionista' | 'talento' | 'aliado'
+  email?: string
 }>()
 
 defineEmits<{
@@ -64,10 +66,10 @@ const contextualActions = computed(() => {
       },
       {
         icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
-        title: 'Calculadora',
-        description: 'Simula tu retorno de inversión',
-        link: '/sistema',
-        cta: 'Calcular rendimientos'
+        title: 'Explora Proyectos',
+        description: 'Conoce los proyectos disponibles para inversión',
+        link: '/proyecto',
+        cta: 'Explorar proyectos'
       }
     ],
     talento: [
@@ -112,7 +114,7 @@ const shareApp = () => {
     text: 'Invierte en el talento deportivo de Guatemala y Latinoamérica',
     url: window.location.origin
   }
-  
+
   if (navigator.share) {
     navigator.share(shareData)
   } else {
@@ -147,6 +149,7 @@ const shareApp = () => {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -159,8 +162,15 @@ const shareApp = () => {
 }
 
 @keyframes bounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 .success-title {
@@ -290,7 +300,7 @@ const shareApp = () => {
   .success-actions {
     grid-template-columns: 1fr;
   }
-  
+
   .success-title {
     font-size: 1.5rem;
   }

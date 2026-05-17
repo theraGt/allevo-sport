@@ -30,37 +30,14 @@
           </button>
           <div class="nav-scroll-wrapper" ref="navWrapper">
             <div class="nav-scroll-content">
-              <router-link to="/admin/dashboard/overview" class="nav-link"
-                :class="{ active: $route.path.includes('overview') }">
-                PANEL RWA
-              </router-link>
-              <router-link to="/admin/dashboard/sponsors" class="nav-link"
-                :class="{ active: $route.path.includes('sponsors') }">
-                SPONSORS
-              </router-link>
-              <router-link to="/admin/dashboard/inversionistas" class="nav-link"
-                :class="{ active: $route.path.includes('inversionistas') }">
-                INVERSIONISTAS
-              </router-link>
-              <router-link to="/admin/dashboard/proyectos" class="nav-link"
-                :class="{ active: $route.path.includes('proyectos') }">
-                PROYECTOS
-              </router-link>
-              <router-link to="/admin/dashboard/atletas" class="nav-link"
-                :class="{ active: $route.path.includes('atletas') && !$route.path.includes('talentos/panel') }">
-                TALENTOS
-              </router-link>
-              <router-link to="/admin/talentos/panel" class="nav-link"
-                :class="{ active: $route.path.includes('talentos/panel') }">
-                TALENTOS PANEL
-              </router-link>
-              <router-link to="/admin/dashboard/noticias" class="nav-link"
-                :class="{ active: $route.path.includes('noticias') }">
-                NOTICIAS
-              </router-link>
-              <router-link to="/admin/dashboard/postulaciones" class="nav-link"
-                :class="{ active: $route.path.includes('postulaciones') }">
-                POSTULACIONES
+              <router-link
+                v-for="item in filteredNavItems"
+                :key="item.key"
+                :to="item.route"
+                class="nav-link"
+                :class="{ active: $route.path.includes(item.route.replace('/admin/dashboard/', '').replace('/admin/', '')) }"
+              >
+                {{ item.label }}
               </router-link>
             </div>
             <div class="nav-scroll-fade-left" :class="{ visible: canScrollLeft }"></div>
@@ -80,20 +57,44 @@
             <span></span>
             <span></span>
           </button>
-          <div class="network-badge desktop-only">
-            <span class="live-dot"></span>
-            <span>POLYGON</span>
+
+          <div class="profile-wrapper desktop-only" ref="profileWrapper">
+            <div class="profile-trigger" @click.stop="toggleProfile">
+              <div class="profile-avatar">{{ userInitials }}</div>
+              <div class="profile-info">
+                <span class="profile-name">{{ userData.nombre || 'Usuario' }}</span>
+                <span class="profile-role">{{ userData.rol || 'Admin' }}</span>
+              </div>
+              <svg class="profile-chevron" :class="{ open: isProfileOpen }" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+              </svg>
+            </div>
+            <div class="profile-dropdown" :class="{ open: isProfileOpen }">
+              <router-link to="/admin/dashboard/perfil" class="dropdown-item" @click="closeProfile">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                  <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                Ver perfil
+              </router-link>
+              <button class="dropdown-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                  <path
+                    d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                </svg>
+                Conectar wallet
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item danger" @click="logout">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                  <path
+                    d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" />
+                </svg>
+                Cerrar sesión
+              </button>
+            </div>
           </div>
-          <button class="btn-primary desktop-only">
-            CONECTAR WALLET
-          </button>
-          <button class="btn-logout desktop-only" @click="logout">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="16" height="16">
-              <path
-                d="M377.9 105.9L340.7 68.7c-7.5-7.5-19.7-7.5-27.2 0l-25.2 25.2c-7.5 7.5-7.5 19.7 0 27.2l47.1 47.1H224c-13.3 0-24 10.7-24 24v32c0 13.3 10.7 24 24 24h136.6l-47.1 47.1c-7.5 7.5-7.5 19.7 0 27.2l25.2 25.2c7.5 7.5 19.7 7.5 27.2 0l37.2-37.2c7.5-7.5 7.5-19.7 0-27.2zM224 352h-64c-13.3 0-24-10.7-24-24V128c0-13.3 10.7-24 24-24h64c13.3 0 24 10.7 24 24v200c0 13.3-10.7 24-24 24zM160 128c-13.3 0-24-10.7-24-24S146.7 80 160 80h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H160z" />
-            </svg>
-            SALIR
-          </button>
         </div>
       </div>
     </header>
@@ -101,22 +102,28 @@
     <div class="mobile-menu" :class="{ open: isMenuOpen }">
       <div class="mobile-menu-overlay" @click="closeMenu"></div>
       <div class="mobile-menu-panel">
+        <div class="mobile-user-header">
+          <div class="mobile-user-avatar">{{ userInitials }}</div>
+          <div class="mobile-user-info">
+            <span class="mobile-user-name">{{ userData.nombre || 'Usuario' }}</span>
+            <span class="mobile-user-role">{{ userData.rol || 'Admin' }}</span>
+          </div>
+        </div>
         <div class="mobile-menu-header">
           <h3>MENU</h3>
           <button class="close-btn" @click="closeMenu">✕</button>
         </div>
         <nav class="mobile-nav">
-          <router-link to="/admin/dashboard/overview" class="mobile-nav-link" @click="closeMenu">PANEL RWA</router-link>
-          <router-link to="/admin/dashboard/atletas" class="mobile-nav-link" @click="closeMenu">TALENTOS</router-link>
-          <router-link to="/admin/talentos/panel" class="mobile-nav-link" @click="closeMenu">TALENTOS PANEL</router-link>
-          <router-link to="/admin/dashboard/sponsors" class="mobile-nav-link" @click="closeMenu">SPONSORS</router-link>
-          <router-link to="/admin/dashboard/inversionistas" class="mobile-nav-link"
-            @click="closeMenu">INVERSIONISTAS</router-link>
-          <router-link to="/admin/dashboard/proyectos" class="mobile-nav-link"
-            @click="closeMenu">PROYECTOS</router-link>
-          <router-link to="/admin/dashboard/noticias" class="mobile-nav-link" @click="closeMenu">NOTICIAS</router-link>
-          <router-link to="/admin/dashboard/postulaciones" class="mobile-nav-link"
-            @click="closeMenu">POSTULACIONES</router-link>
+          <router-link
+            v-for="item in filteredNavItems"
+            :key="item.key"
+            :to="item.route"
+            class="mobile-nav-link"
+            @click="closeMenu"
+          >
+            {{ item.label }}
+          </router-link>
+          <router-link to="/admin/dashboard/perfil" class="mobile-nav-link" @click="closeMenu">MI PERFIL</router-link>
         </nav>
         <div class="mobile-menu-actions">
           <button class="btn-primary" @click="closeMenu">CONECTAR WALLET</button>
@@ -138,16 +145,91 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { tickerData } from '../../../data/adminDashboard'
+import { useAuth, refreshUser } from '../../../composables/useAuth'
 
 const router = useRouter()
+const { canView, userRole, logout: authLogout } = useAuth()
 const tickerItems = [...tickerData, ...tickerData]
 const isMenuOpen = ref(false)
+const isProfileOpen = ref(false)
 const navWrapper = ref<HTMLElement | null>(null)
+const profileWrapper = ref<HTMLElement | null>(null)
 const canScrollLeft = ref(false)
 const canScrollRight = ref(false)
+
+interface UserData {
+  nombre?: string
+  email?: string
+  rol?: string
+}
+
+const userData = ref<UserData>({})
+
+const userInitials = computed(() => {
+  const name = userData.value.nombre || userData.value.email || 'U'
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+})
+
+const loadUser = () => {
+  try {
+    const raw = localStorage.getItem('user')
+    if (raw) {
+      userData.value = JSON.parse(raw)
+    }
+  } catch {
+    userData.value = {}
+  }
+}
+
+interface NavItem {
+  label: string
+  route: string
+  key: string
+}
+
+const allNavItems: NavItem[] = [
+  { label: 'PANEL RWA', route: '/admin/dashboard/overview', key: 'panel-rwa' },
+  { label: 'SPONSORS', route: '/admin/dashboard/sponsors', key: 'sponsors' },
+  { label: 'INVERSIONISTAS', route: '/admin/dashboard/inversionistas', key: 'inversionistas' },
+  { label: 'PROYECTOS', route: '/admin/dashboard/proyectos', key: 'proyectos' },
+  { label: 'TALENTOS', route: '/admin/dashboard/atletas', key: 'talentos' },
+  { label: 'TALENTOS PANEL', route: '/admin/talentos/panel', key: 'talentos-panel' },
+  { label: 'NOTICIAS', route: '/admin/dashboard/noticias', key: 'noticias' },
+  { label: 'POSTULACIONES', route: '/admin/dashboard/postulaciones', key: 'postulaciones' }
+]
+
+const filteredNavItems = computed(() => {
+  return allNavItems
+    .filter(item => canView(item.key))
+    .map(item => {
+      if (item.key === 'talentos' && userRole.value === 'talento') {
+        return { ...item, route: '/admin/dashboard/perfil' }
+      }
+      return item
+    })
+})
+
+const toggleProfile = () => {
+  isProfileOpen.value = !isProfileOpen.value
+}
+
+const closeProfile = () => {
+  isProfileOpen.value = false
+}
+
+const handleClickOutside = (e: MouseEvent) => {
+  if (profileWrapper.value && !profileWrapper.value.contains(e.target as Node)) {
+    isProfileOpen.value = false
+  }
+}
 
 const checkNavScroll = () => {
   if (!navWrapper.value) return
@@ -174,17 +256,22 @@ const closeMenu = () => {
 }
 
 const logout = () => {
+  authLogout()
   router.push('/admin/login')
 }
 
 const handleLogout = () => {
   closeMenu()
+  authLogout()
   router.push('/admin/login')
 }
 
 onMounted(() => {
+  loadUser()
+  refreshUser()
   checkNavScroll()
   window.addEventListener('resize', checkNavScroll)
+  document.addEventListener('click', handleClickOutside)
   if (navWrapper.value) {
     navWrapper.value.addEventListener('scroll', checkNavScroll)
   }
@@ -192,6 +279,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkNavScroll)
+  document.removeEventListener('click', handleClickOutside)
   if (navWrapper.value) {
     navWrapper.value.removeEventListener('scroll', checkNavScroll)
   }
@@ -719,5 +807,189 @@ onUnmounted(() => {
   .logo-text {
     display: none;
   }
+}
+
+/* ===== Profile Avatar & Dropdown ===== */
+.profile-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+.profile-trigger:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #8b1e1e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(207, 46, 46, 0.25);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.profile-name {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.profile-role {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #888;
+  text-transform: capitalize;
+}
+
+.profile-chevron {
+  color: #888;
+  transition: transform 0.25s;
+  margin-left: 2px;
+}
+
+.profile-chevron.open {
+  transform: rotate(180deg);
+  color: var(--color-primary);
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 200px;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 0;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 200;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+.profile-dropdown.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: #ccc;
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+  background: rgba(207, 46, 46, 0.12);
+  color: #fff;
+}
+
+.dropdown-item svg {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.dropdown-item.danger:hover {
+  background: rgba(207, 46, 46, 0.2);
+  color: #ff6b6b;
+}
+
+.dropdown-item.danger:hover svg {
+  color: #ff6b6b;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 6px 12px;
+}
+
+/* ===== Mobile User Header ===== */
+.mobile-user-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.mobile-user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #8b1e1e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(207, 46, 46, 0.2);
+}
+
+.mobile-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mobile-user-name {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.mobile-user-role {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-primary);
+  text-transform: capitalize;
 }
 </style>

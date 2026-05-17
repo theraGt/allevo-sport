@@ -1,5 +1,11 @@
 <template>
   <div class="postulaciones-dashboard">
+    <!-- Alerta de datos mock -->
+    <div v-if="errorCarga" class="mock-alert">
+      <ion-icon :icon="warningOutline"></ion-icon>
+      <span>{{ errorCarga }}. Mostrando datos de demostración.</span>
+    </div>
+
     <!-- Header / KPIs -->
     <div class="dashboard-header">
       <div class="header-title">
@@ -66,7 +72,7 @@
 <script setup lang="ts">
 import { IonIcon } from '@ionic/vue'
 import {
-  peopleOutline, gridOutline, listOutline
+  peopleOutline, gridOutline, listOutline, warningOutline
 } from 'ionicons/icons'
 import { ref, computed, onMounted } from 'vue'
 
@@ -75,13 +81,14 @@ import FiltersBar from './FiltersBar.vue'
 import VistaTabla from './VistaTabla.vue'
 import VistaKanban from './VistaKanban.vue'
 import ModalDetalle from './ModalDetalle.vue'
-import { Postulacion } from './postulacionesUtils'
+import { Postulacion, formatFecha } from './postulacionesUtils'
 
 const API_BASE_URL = 'https://allevosports.thera.com.gt:81/api'
 
 /* ─── Estado ─── */
 const postulaciones = ref<Postulacion[]>([])
 const cargando = ref(false)
+const errorCarga = ref<string | null>(null)
 const showDetalle = ref(false)
 const postulacionActiva = ref<Postulacion | null>(null)
 
@@ -127,17 +134,138 @@ const stats = computed(() => {
   return { total, atletas, sponsors, inversionistas, pendientes, aprobados }
 })
 
+const POSTULACIONES_MOCK: Postulacion[] = [
+  {
+    id: 1,
+    nombre: 'Carlos Mendoza',
+    email: 'carlos.m@email.com',
+    telefono: '+502 4123 4567',
+    ciudad: 'Guatemala City',
+    departamento: 'Guatemala',
+    tipo: 'atleta',
+    estado: 'pendiente',
+    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    datos: { deporte: 'Fútbol', posicion: 'Delantero', edad: 22, experiencia: '5 años' },
+    notas_admin: ''
+  },
+  {
+    id: 2,
+    nombre: 'Ana Lucía Fernández',
+    email: 'ana.lucia@corporativo.com',
+    telefono: '+502 5890 1234',
+    ciudad: 'Antigua Guatemala',
+    departamento: 'Sacatepéquez',
+    tipo: 'sponsor',
+    estado: 'en_revision',
+    created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 1).toISOString(),
+    datos: { empresa: 'Corporativo AL', industria: 'Bebidas deportivas', presupuesto: 'Q50,000 - Q100,000' },
+    notas_admin: 'Revisar portafolio de marca'
+  },
+  {
+    id: 3,
+    nombre: 'Roberto Castellanos',
+    email: 'roberto.c@inversiones.gt',
+    telefono: '+502 3312 7890',
+    ciudad: 'Quetzaltenango',
+    departamento: 'Quetzaltenango',
+    tipo: 'inversionista',
+    estado: 'aprobado',
+    created_at: new Date(Date.now() - 86400000 * 12).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 3).toISOString(),
+    datos: { tipo_inversion: 'RWA Tokens', monto_interes: 'Q250,000', perfil_riesgo: 'Moderado' },
+    notas_admin: 'Documentación completa'
+  },
+  {
+    id: 4,
+    nombre: 'María José Reyna',
+    email: 'mj.reyna@email.com',
+    telefono: '+502 5567 8901',
+    ciudad: 'Escuintla',
+    departamento: 'Escuintla',
+    tipo: 'atleta',
+    estado: 'documentos',
+    created_at: new Date(Date.now() - 86400000 * 8).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    datos: { deporte: 'Atletismo', prueba: '100m planos', edad: 19, marca_personal: '11.2s' },
+    notas_admin: 'Pendiente carta médica'
+  },
+  {
+    id: 5,
+    nombre: 'Grupo Impulsora S.A.',
+    email: 'contacto@impulsora.gt',
+    telefono: '+502 2222 3333',
+    ciudad: 'Guatemala City',
+    departamento: 'Guatemala',
+    tipo: 'sponsor',
+    estado: 'rechazado',
+    created_at: new Date(Date.now() - 86400000 * 20).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 4).toISOString(),
+    datos: { empresa: 'Grupo Impulsora', industria: 'Construcción', presupuesto: 'Q20,000' },
+    notas_admin: 'Presupuesto insuficiente para requisitos mínimos'
+  },
+  {
+    id: 6,
+    nombre: 'Luis Fernando Paz',
+    email: 'lf.paz@capital.gt',
+    telefono: '+502 4455 6677',
+    ciudad: 'Cobán',
+    departamento: 'Alta Verapaz',
+    tipo: 'inversionista',
+    estado: 'entrevista',
+    created_at: new Date(Date.now() - 86400000 * 10).toISOString(),
+    updated_at: new Date(Date.now() - 86400000).toISOString(),
+    datos: { tipo_inversion: 'Proyectos', monto_interes: 'Q500,000', perfil_riesgo: 'Alto' },
+    notas_admin: 'Entrevista programada para el viernes'
+  },
+  {
+    id: 7,
+    nombre: 'Daniela Hernández',
+    email: 'dani.h@email.com',
+    telefono: '+502 3344 5566',
+    ciudad: 'Villa Nueva',
+    departamento: 'Guatemala',
+    tipo: 'atleta',
+    estado: 'aprobado',
+    created_at: new Date(Date.now() - 86400000 * 15).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 6).toISOString(),
+    datos: { deporte: 'Natación', estilo: 'Libre', edad: 17, categoria: 'Juvenil' },
+    notas_admin: 'Talento aprobado, en onboarding'
+  },
+  {
+    id: 8,
+    nombre: 'Pedro Antonio Ruiz',
+    email: 'paruiz@patrocinio.com',
+    telefono: '+502 7788 9900',
+    ciudad: 'San Marcos',
+    departamento: 'San Marcos',
+    tipo: 'sponsor',
+    estado: 'pendiente',
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 86400000).toISOString(),
+    datos: { empresa: 'Patrocinios Ruiz', industria: 'Textiles deportivos', presupuesto: 'Q75,000' },
+    notas_admin: ''
+  }
+]
+
 /* ─── API ─── */
 const cargarPostulaciones = async () => {
   cargando.value = true
+  errorCarga.value = null
   try {
     const res = await fetch(`${API_BASE_URL}/postulaciones`, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
     })
-    if (!res.ok) throw new Error('Error al cargar')
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}))
+      throw new Error(body.message || `Error ${res.status}: ${res.statusText}`)
+    }
     postulaciones.value = await res.json()
-  } catch (err) {
-    console.error(err)
+  } catch (err: any) {
+    console.error('Error cargando postulaciones:', err)
+    errorCarga.value = err.message || 'No se pudieron cargar las postulaciones'
+    postulaciones.value = POSTULACIONES_MOCK
   } finally {
     cargando.value = false
   }
@@ -206,6 +334,25 @@ onMounted(cargarPostulaciones)
 </script>
 
 <style scoped>
+.mock-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--border-radius);
+  color: #fbbf24;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+
+.mock-alert ion-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
 .postulaciones-dashboard {
   padding: 24px;
   background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);

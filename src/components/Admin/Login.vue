@@ -60,19 +60,65 @@
                                 <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
                             </div>
 
+                            <div v-if="password" class="password-requirements">
+                                <p class="requirements-title">La contraseña debe incluir:</p>
+                                <ul class="requirements-list">
+                                    <li :class="{ met: hasMinLength }">
+                                        <ion-icon :icon="hasMinLength ? checkmarkCircleOutline : ellipseOutline"></ion-icon>
+                                        Al menos 8 caracteres
+                                    </li>
+                                    <li :class="{ met: hasUppercase }">
+                                        <ion-icon :icon="hasUppercase ? checkmarkCircleOutline : ellipseOutline"></ion-icon>
+                                        Una letra mayúscula
+                                    </li>
+                                    <li :class="{ met: hasLowercase }">
+                                        <ion-icon :icon="hasLowercase ? checkmarkCircleOutline : ellipseOutline"></ion-icon>
+                                        Una letra minúscula
+                                    </li>
+                                    <li :class="{ met: hasNumber }">
+                                        <ion-icon :icon="hasNumber ? checkmarkCircleOutline : ellipseOutline"></ion-icon>
+                                        Un número
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div v-if="password" class="password-strength-meter">
+                                <div class="strength-bar">
+                                    <div class="strength-fill" :class="passwordStrength"></div>
+                                </div>
+                                <span class="strength-label" :class="passwordStrength">
+                                    <template v-if="passwordStrength === 'debil'">Contraseña débil</template>
+                                    <template v-else-if="passwordStrength === 'media'">Contraseña media</template>
+                                    <template v-else-if="passwordStrength === 'fuerte'">Contraseña fuerte</template>
+                                    <template v-else>Contraseña muy fuerte</template>
+                                </span>
+                            </div>
+
                             <button type="submit" class="btn-primary login-btn" :disabled="!isFormValid || isLoading"
                                 :class="{ 'loading': isLoading }">
                                 <span v-if="!isLoading">Iniciar Sesión</span>
                                 <span v-else class="loader"></span>
                             </button>
 
-                            <div v-if="loginError" class="login-error">
-                                {{ loginError }}
-                            </div>
+<div v-if="loginError" class="login-error">
+                            {{ loginError }}
+                        </div>
                         </form>
 
                         <div class="login-footer" v-reveal="'fade-up'">
                             <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                        </div>
+
+                        <div class="register-cta" v-reveal="'fade-up'">
+                            <button class="btn-register" @click="openRegistroModal()">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="8.5" cy="7" r="4"/>
+                                    <line x1="20" y1="8" x2="20" y2="14"/>
+                                    <line x1="23" y1="11" x2="17" y2="11"/>
+                                </svg>
+                                No cuentas con un usuario Allevo
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -83,9 +129,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { IonPage, IonContent } from '@ionic/vue'
-import { RouterLink } from 'vue-router'
-import { homeOutline } from 'ionicons/icons'
+import { IonPage, IonContent, IonIcon } from '@ionic/vue'
+import { RouterLink, useRouter } from 'vue-router'
+import { homeOutline, checkmarkCircleOutline, ellipseOutline } from 'ionicons/icons'
+import { useRegistroModal } from '../../composables/useRegistroModal'
 
 const email = ref('')
 const password = ref('')
@@ -96,13 +143,35 @@ const loginError = ref('')
 const emailError = ref('')
 const passwordError = ref('')
 
+const { openRegistroModal } = useRegistroModal()
+
+const router = useRouter()
+
 const emailValid = computed(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(email.value)
 })
 
+const hasMinLength = computed(() => password.value.length >= 8)
+const hasUppercase = computed(() => /[A-Z]/.test(password.value))
+const hasLowercase = computed(() => /[a-z]/.test(password.value))
+const hasNumber = computed(() => /\d/.test(password.value))
+
 const passwordValid = computed(() => {
-    return password.value.length >= 6
+    return hasMinLength.value && hasUppercase.value && hasLowercase.value && hasNumber.value
+})
+
+const passwordStrength = computed(() => {
+    let strength = 0
+    if (hasMinLength.value) strength++
+    if (hasUppercase.value) strength++
+    if (hasLowercase.value) strength++
+    if (hasNumber.value) strength++
+    
+    if (strength <= 1) return 'debil'
+    if (strength <= 2) return 'media'
+    if (strength <= 3) return 'fuerte'
+    return 'muy_fuerte'
 })
 
 const isFormValid = computed(() => {
@@ -122,8 +191,8 @@ const validateEmail = () => {
 const validatePassword = () => {
     if (!password.value) {
         passwordError.value = 'La contraseña es requerida'
-    } else if (password.value.length < 6) {
-        passwordError.value = 'Mínimo 6 caracteres'
+    } else if (!passwordValid.value) {
+        passwordError.value = 'La contraseña no cumple los requisitos mínimos'
     } else {
         passwordError.value = ''
     }
@@ -137,7 +206,7 @@ const clearPasswordError = () => {
     passwordError.value = ''
 }
 
-const API_BASE_URL = 'https://allevosports.thera.com.gt:81/api'
+const API_BASE_URL = 'http://localhost:3005/api'
 
 const handleLogin = async () => {
     validateEmail()
@@ -157,25 +226,20 @@ const handleLogin = async () => {
 
         const data = await res.json()
 
-        if (res.ok && data.token) {
+        if (res.ok) {
             localStorage.setItem('token', data.token)
-            localStorage.setItem('user', JSON.stringify(data.user || {}))
-            window.location.href = '/admin/dashboard/overview'
+            localStorage.setItem('user', JSON.stringify(data.user))
+            localStorage.setItem('pendingVerificationEmail', email.value)
+            router.push(`/admin/validate-code?email=${encodeURIComponent(email.value)}`)
+            isLoading.value = false
         } else {
             loginError.value = data.message || 'Credenciales incorrectas. Intenta de nuevo.'
             isLoading.value = false
         }
     } catch (err) {
         console.error('Error de login:', err)
-        // Fallback para desarrollo: si la API no responde, usar login hardcodeado
-        if (email.value === 'admin@allevo.com' && password.value === 'admin123') {
-            localStorage.setItem('token', 'dev-token-fallback')
-            localStorage.setItem('user', JSON.stringify({ email: 'admin@allevo.com', rol: 'admin' }))
-            window.location.href = '/admin/dashboard/overview'
-        } else {
-            loginError.value = 'Error de conexión con el servidor. Intenta de nuevo.'
-            isLoading.value = false
-        }
+        loginError.value = 'Error de conexión con el servidor. Intenta de nuevo.'
+        isLoading.value = false
     }
 }
 </script>
@@ -443,6 +507,87 @@ const handleLogin = async () => {
     animation: fade-in 0.3s ease;
 }
 
+.password-requirements {
+    padding: 14px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--border-radius);
+}
+
+.requirements-title {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.requirements-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.requirements-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    transition: color 0.25s ease;
+}
+
+.requirements-list li ion-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.requirements-list li.met {
+    color: #44ff44;
+}
+
+.requirements-list li.met ion-icon {
+    color: #44ff44;
+}
+
+.password-strength-meter {
+    margin-top: 12px;
+}
+
+.strength-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.strength-fill.debil { width: 25%; background: #ff4444; }
+.strength-fill.media { width: 50%; background: #ffaa44; }
+.strength-fill.fuerte { width: 75%; background: #44ff44; }
+.strength-fill.muy_fuerte { width: 100%; background: #00e090; }
+
+.strength-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 6px;
+}
+
+.strength-label.debil { color: #ff4444; }
+.strength-label.media { color: #ffaa44; }
+.strength-label.fuerte { color: #44ff44; }
+.strength-label.muy_fuerte { color: #00e090; }
+
 .password-wrapper {
     position: relative;
     display: flex;
@@ -539,6 +684,42 @@ const handleLogin = async () => {
 .forgot-link:hover {
     color: var(--color-primary);
     text-decoration: underline;
+}
+
+.register-cta {
+    margin-top: var(--spacing-lg);
+    text-align: center;
+}
+
+.btn-register {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: transparent;
+    border: 1px solid rgba(207, 46, 46, 0.4);
+    border-radius: var(--border-radius);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-register svg {
+    color: var(--color-primary);
+    transition: transform 0.3s ease;
+}
+
+.btn-register:hover {
+    background: rgba(207, 46, 46, 0.1);
+    border-color: var(--color-primary);
+    color: var(--color-text);
+    transform: translateY(-2px);
+}
+
+.btn-register:hover svg {
+    transform: translateX(4px);
 }
 
 @media (max-width: 480px) {

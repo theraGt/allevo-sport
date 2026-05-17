@@ -12,16 +12,30 @@
         <p class="form-subtitle">Crea tu cuenta y comienza a invertir en talentos deportivos</p>
       </div>
       
-      <div class="form-group">
-        <label for="investor-name">Nombre Completo</label>
-        <input 
-          id="investor-name"
-          type="text" 
-          v-model="form.nombreCompleto" 
-          placeholder="Tu nombre completo"
-          autocomplete="name"
-          required 
-        />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="investor-nombres">Nombres</label>
+          <input 
+            id="investor-nombres"
+            type="text" 
+            v-model="form.nombres" 
+            placeholder="Tus nombres"
+            autocomplete="given-name"
+            required 
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="investor-apellidos">Apellidos</label>
+          <input 
+            id="investor-apellidos"
+            type="text" 
+            v-model="form.apellidos" 
+            placeholder="Tus apellidos"
+            autocomplete="family-name"
+            required 
+          />
+        </div>
       </div>
       
       <div class="form-group">
@@ -44,8 +58,55 @@
           v-model="form.telefono" 
           placeholder="+502 0000 0000"
           autocomplete="tel"
-          required 
         />
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="investor-pais">País</label>
+          <select id="investor-pais" v-model="form.pais">
+            <option value="Guatemala">Guatemala</option>
+            <option value="México">México</option>
+            <option value="El Salvador">El Salvador</option>
+            <option value="Honduras">Honduras</option>
+            <option value="Nicaragua">Nicaragua</option>
+            <option value="Costa Rica">Costa Rica</option>
+            <option value="Panamá">Panamá</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="investor-ciudad">Ciudad</label>
+          <input 
+            id="investor-ciudad"
+            type="text" 
+            v-model="form.ciudad" 
+            placeholder="Tu ciudad"
+            autocomplete="address-level2"
+          />
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="investor-fecha">Fecha de Nacimiento</label>
+          <input 
+            id="investor-fecha"
+            type="date" 
+            v-model="form.fechaNacimiento"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="investor-genero">Género</label>
+          <select id="investor-genero" v-model="form.genero">
+            <option value="">Seleccionar</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
       </div>
       
       <div class="form-group">
@@ -68,6 +129,69 @@
             </svg>
           </button>
         </div>
+
+        <div v-if="form.password" class="password-requirements">
+          <p class="requirements-title">La contraseña debe incluir:</p>
+          <ul class="requirements-list">
+            <li :class="{ met: hasMinLength }">
+              <svg v-if="hasMinLength" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#44ff44" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Al menos 8 caracteres
+            </li>
+            <li :class="{ met: hasUppercase }">
+              <svg v-if="hasUppercase" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#44ff44" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Una letra mayúscula
+            </li>
+            <li :class="{ met: hasLowercase }">
+              <svg v-if="hasLowercase" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#44ff44" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Una letra minúscula
+            </li>
+            <li :class="{ met: hasNumber }">
+              <svg v-if="hasNumber" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#44ff44" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Un número
+            </li>
+          </ul>
+        </div>
+
+        <div v-if="form.password" class="password-strength-meter">
+          <div class="strength-bar">
+            <div class="strength-fill" :class="passwordStrength"></div>
+          </div>
+          <span class="strength-label" :class="passwordStrength">
+            <template v-if="passwordStrength === 'debil'">Contraseña débil</template>
+            <template v-else-if="passwordStrength === 'media'">Contraseña media</template>
+            <template v-else-if="passwordStrength === 'fuerte'">Contraseña fuerte</template>
+            <template v-else>Contraseña muy fuerte</template>
+          </span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="investor-confirm-password">Confirmar Contraseña</label>
+        <div class="password-input">
+          <input 
+            id="investor-confirm-password"
+            :type="showConfirmPassword ? 'text' : 'password'" 
+            v-model="form.confirmPassword" 
+            placeholder="Repite tu contraseña"
+            autocomplete="new-password"
+            required 
+          />
+          <button type="button" class="toggle-password" @click="showConfirmPassword = !showConfirmPassword">
+            <svg v-if="!showConfirmPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        <span v-if="form.confirmPassword && form.password !== form.confirmPassword" class="field-error">
+          Las contraseñas no coinciden
+        </span>
       </div>
       
       <div class="form-group checkbox-group">
@@ -78,42 +202,156 @@
         </label>
       </div>
       
-      <button type="submit" class="btn-primary">
-        <span>CREAR CUENTA</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
-        </svg>
+      <button type="submit" class="btn-primary" :disabled="isLoading || !isFormValid">
+        <span v-if="!isLoading">CREAR CUENTA</span>
+        <span v-else class="loader"></span>
       </button>
+      
+      <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
     </form>
     
     <Transition name="fade">
       <RegistrationSuccess 
         v-if="registrationSuccess" 
         role="inversionista"
-        @close="registrationSuccess = false"
+        :email="form.email"
+        @close="handleSuccessClose"
       />
     </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import RegistrationSuccess from './RegistrationSuccess.vue'
+import { useRegistroModal } from '../../composables/useRegistroModal'
 
 const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 const registrationSuccess = ref(false)
+const isLoading = ref(false)
+const errorMessage = ref('')
+
+const { closeRegistroModal } = useRegistroModal()
+
+const API_BASE_URL = 'http://localhost:3005/api'
 
 const form = reactive({
-  nombreCompleto: '',
+  nombres: '',
+  apellidos: '',
   email: '',
   telefono: '',
+  pais: 'Guatemala',
+  ciudad: '',
+  fechaNacimiento: '',
+  genero: '',
   password: '',
+  confirmPassword: '',
   aceptoTerminos: false
 })
 
-const handleSubmit = () => {
-  console.log('Investor form submitted:', form)
-  registrationSuccess.value = true
+const handleSuccessClose = () => {
+  registrationSuccess.value = false
+  closeRegistroModal()
+  // Reset form
+  form.nombres = ''
+  form.apellidos = ''
+  form.email = ''
+  form.telefono = ''
+  form.ciudad = ''
+  form.fechaNacimiento = ''
+  form.genero = ''
+  form.password = ''
+  form.confirmPassword = ''
+  form.aceptoTerminos = false
+}
+
+const hasMinLength = computed(() => form.password.length >= 8)
+const hasUppercase = computed(() => /[A-Z]/.test(form.password))
+const hasLowercase = computed(() => /[a-z]/.test(form.password))
+const hasNumber = computed(() => /\d/.test(form.password))
+
+const isPasswordValid = computed(() => {
+  return hasMinLength.value && hasUppercase.value && hasLowercase.value && hasNumber.value
+})
+
+const passwordStrength = computed(() => {
+  let strength = 0
+  if (hasMinLength.value) strength++
+  if (hasUppercase.value) strength++
+  if (hasLowercase.value) strength++
+  if (hasNumber.value) strength++
+  
+  if (strength <= 1) return 'debil'
+  if (strength <= 2) return 'media'
+  if (strength <= 3) return 'fuerte'
+  return 'muy_fuerte'
+})
+
+const isFormValid = computed(() => {
+  return (
+    form.nombres.trim() !== '' &&
+    form.apellidos.trim() !== '' &&
+    form.email.trim() !== '' &&
+    form.password.trim() !== '' &&
+    form.confirmPassword.trim() !== '' &&
+    isPasswordValid.value &&
+    form.password === form.confirmPassword &&
+    form.aceptoTerminos
+  )
+})
+
+const handleSubmit = async () => {
+  if (!isFormValid.value) {
+    errorMessage.value = 'Por favor completa todos los campos requeridos y asegúrate de que las contraseñas coincidan'
+    return
+  }
+
+  if (!form.aceptoTerminos) {
+    errorMessage.value = 'Debes aceptar los términos y condiciones'
+    return
+  }
+
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    const payload = {
+      nombres: form.nombres,
+      apellidos: form.apellidos,
+      email: form.email,
+      password: form.password,
+      telefono: form.telefono || null,
+      pais: form.pais || 'Guatemala',
+      ciudad: form.ciudad || null,
+      fecha_nacimiento: form.fechaNacimiento || null,
+      genero: form.genero || null,
+      tipo_usuario: 'inversionista'
+    }
+
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Error al registrar usuario')
+    }
+
+    console.log('Usuario registrado exitosamente:', data)
+    registrationSuccess.value = true
+    
+  } catch (err: any) {
+    console.error('Error al registrar:', err)
+    errorMessage.value = err.message || 'Error al crear la cuenta. Intenta de nuevo.'
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
@@ -306,6 +544,18 @@ const handleSubmit = () => {
   gap: 18px;
 }
 
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -324,7 +574,9 @@ const handleSubmit = () => {
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="tel"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group select {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
@@ -333,6 +585,26 @@ const handleSubmit = () => {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.95rem;
   transition: all 0.3s ease;
+  width: 100%;
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.4)' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.form-group select option {
+  background: #151515;
+  color: #fff;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #CF2E2E;
+  box-shadow: 0 0 0 4px rgba(207, 46, 46, 0.15), 0 0 20px rgba(207, 46, 46, 0.08);
 }
 
 .form-group input:focus {
@@ -429,6 +701,124 @@ const handleSubmit = () => {
 
 .checkbox-text a:hover {
   text-decoration: underline;
+}
+
+.field-error {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  color: #ff6b6b;
+  margin-top: 4px;
+}
+
+.password-requirements {
+  padding: 14px 16px;
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.requirements-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.requirements-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.requirements-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.25s ease;
+}
+
+.requirements-list li svg {
+  flex-shrink: 0;
+}
+
+.requirements-list li.met {
+  color: #44ff44;
+}
+
+.password-strength-meter {
+  margin-top: 12px;
+}
+
+.strength-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.strength-fill.debil { width: 25%; background: #ff4444; }
+.strength-fill.media { width: 50%; background: #ffaa44; }
+.strength-fill.fuerte { width: 75%; background: #44ff44; }
+.strength-fill.muy_fuerte { width: 100%; background: #00e090; }
+
+.strength-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  display: block;
+  margin-top: 6px;
+}
+
+.strength-label.debil { color: #ff4444; }
+.strength-label.media { color: #ffaa44; }
+.strength-label.fuerte { color: #44ff44; }
+.strength-label.muy_fuerte { color: #00e090; }
+
+.error-message {
+  text-align: center;
+  padding: 12px 16px;
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 12px;
+  color: #ff6b6b;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .fade-enter-active,

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import { isAuthenticated, canAccessRoute } from '../composables/useAuth';
 import HomePage from '../views/HomePage.vue'
 import TalentPage from '../views/TalentPage.vue'
 import SistemaPage from '../views/SistemaPage.vue'
@@ -12,6 +13,7 @@ import ProyectosPage from '../views/Proyectos.vue'
 import TerminosPage from '../views/TerminosPage.vue'
 import PrivacidadPage from '../views/PrivacidadPage.vue'
 import Login from '../components/Admin/Login.vue'
+import ValidateLogin from '../components/Admin/ValidateLogin.vue'
 import DashboardLayout from '../components/Admin/Dashboard/DashboardLayout.vue'
 import DashboardOverview from '../views/Admin/DashboardOverview.vue'
 import AtletasDashboard from '../views/Admin/AtletasDashboard.vue'
@@ -20,6 +22,7 @@ import InversionistasDashboard from '../views/Admin/InversionistasDashboard.vue'
 import ProyectosDashboard from '../views/Admin/ProyectosDashboard.vue'
 import PostulacionesDashboardView from '../views/Admin/PostulacionesDashboardView.vue'
 import NoticiasDashboardView from '../views/Admin/NoticiasDashboardView.vue'
+import PerfilPage from '../views/Admin/PerfilPage.vue'
 import TalentPanel from '../views/Front/TalentPanel.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -88,33 +91,43 @@ const routes: Array<RouteRecordRaw> = [
     component: Login
   },
   {
+    path: '/admin/validate-code',
+    name: 'AdminValidateCode',
+    component: ValidateLogin
+  },
+  {
     path: '/admin/dashboard',
     redirect: '/admin/dashboard/overview'
   },
   {
     path: '/admin/dashboard/overview',
     name: 'DashboardOverview',
-    component: DashboardOverview
+    component: DashboardOverview,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/atletas',
     name: 'AtletasDashboard',
-    component: AtletasDashboard
+    component: AtletasDashboard,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/sponsors',
     name: 'SponsorsDashboard',
-    component: SponsorsDashboard
+    component: SponsorsDashboard,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/inversionistas',
     name: 'InversionistasDashboard',
-    component: InversionistasDashboard
+    component: InversionistasDashboard,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/proyectos',
     name: 'ProyectosDashboard',
-    component: ProyectosDashboard
+    component: ProyectosDashboard,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/noticias',
@@ -123,38 +136,64 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/admin/dashboard/noticias/bandeja',
     name: 'NoticiasBandeja',
-    component: NoticiasDashboardView
+    component: NoticiasDashboardView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/noticias/editor',
     name: 'NoticiasEditor',
-    component: NoticiasDashboardView
+    component: NoticiasDashboardView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/noticias/editor/:id',
     name: 'NoticiasEditorEdit',
-    component: NoticiasDashboardView
+    component: NoticiasDashboardView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/noticias/publicados',
     name: 'NoticiasPublicados',
-    component: NoticiasDashboardView
+    component: NoticiasDashboardView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/dashboard/postulaciones',
     name: 'PostulacionesDashboard',
-    component: PostulacionesDashboardView
+    component: PostulacionesDashboardView,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/dashboard/perfil',
+    name: 'Perfil',
+    component: PerfilPage,
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin/talentos/panel',
     name: 'TalentPanel',
-    component: TalentPanel
+    component: TalentPanel,
+    meta: { requiresAuth: true }
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL || '/'),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !isAuthenticated()) {
+    next('/admin/login')
+    return
+  }
+
+  if (to.meta.requiresAuth && isAuthenticated() && !canAccessRoute(to.name)) {
+    next('/admin/dashboard/perfil')
+    return
+  }
+
+  next()
 })
 
 export default router

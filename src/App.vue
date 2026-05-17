@@ -6,6 +6,7 @@
     <FloatingInvestButton v-if="!isAdminRoute" />
     <AtletasModal />
     <InversionistaModal />
+    <RegistroModal />
   </ion-app>
 </template>
 
@@ -18,6 +19,7 @@ import Toast from './components/UI/Toast.vue';
 import FloatingInvestButton from './components/Home/FloatingInvestButton.vue';
 import AtletasModal from './components/Modales/AtletasModal.vue';
 import InversionistaModal from './components/Modales/InversionistaModal.vue';
+import RegistroModal from './components/Modales/RegistroModal.vue';
 
 const route = useRoute()
 const isAdminRoute = computed(() => route.path.startsWith('/admin'))
