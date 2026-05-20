@@ -1,9 +1,41 @@
 import app from './app.js';
 import http from 'http';
 
+import { connectBroker } from './events/publisher.js';
+
 const PORT = app.get('port');
 
-http.createServer(app).listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Allevo Sports API corriendo en http://localhost:${PORT}`);
-    console.log(`📋 Health check: http://localhost:${PORT}/api/health`);
-});
+const startServer = async () => {
+
+    try {
+
+        await connectBroker();
+
+        console.log(
+            '🐰 RabbitMQ conectado'
+        );
+
+    } catch (error) {
+
+        console.error(
+            '❌ RabbitMQ no disponible'
+        );
+    }
+
+    http.createServer(app).listen(
+        PORT,
+        '0.0.0.0',
+        () => {
+
+            console.log(
+                `🚀 Allevo Sports API corriendo en http://localhost:${PORT}`
+            );
+
+            console.log(
+                `📋 Health check: http://localhost:${PORT}/api/health`
+            );
+        }
+    );
+};
+
+startServer();

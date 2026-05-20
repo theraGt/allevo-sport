@@ -41,17 +41,21 @@ const queries = {
     delete_inversionista: `DELETE FROM allevo.inversionistas WHERE id=$1`,
 
     // ---- USUARIOS ----
-    get_usuarios: `SELECT id, nombre, apellido, email, rol, activo, created_at FROM allevo.usuarios ORDER BY id ASC`,
-    get_usuario_by_id: `SELECT id, nombre, apellido, email, rol, activo, created_at FROM allevo.usuarios WHERE id = $1`,
+    get_usuarios: `SELECT id, nombres, apellidos, email, tipo_usuario, activo, created_at FROM allevo.usuarios ORDER BY id ASC`,
+    get_usuario_by_id: `SELECT id, nombres, apellidos, email, tipo_usuario, activo, created_at FROM allevo.usuarios WHERE id = $1`,
     get_usuario_by_email: `SELECT * FROM allevo.usuarios WHERE email = $1`,
-    create_usuario: `INSERT INTO allevo.usuarios (nombre, apellido, email, password, rol, activo)
-                              VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`,
-    update_usuario: `UPDATE allevo.usuarios SET nombre=$1, apellido=$2, email=$3, rol=$4, activo=$5
+    create_usuario: `INSERT INTO allevo.usuarios (nombres, apellidos, email, password_hash, tipo_usuario, token_verificacion, telefono, pais, ciudad, fecha_nacimiento, genero)
+                              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id`,
+    update_usuario: `UPDATE allevo.usuarios SET nombres=$1, apellidos=$2, email=$3, tipo_usuario=$4, activo=$5
                               WHERE id=$6 RETURNING id`,
     delete_usuario: `DELETE FROM allevo.usuarios WHERE id=$1`,
 
     // ---- AUTH ----
-    login_query: `Select id, email, password_hash, tipo_usuario, nombres, apellidos FROM allevo.usuarios WHERE email = $1 AND activo = true`,
+    login_query: `Select id, email, password_hash, tipo_usuario, nombres, apellidos, activo, verificado FROM allevo.usuarios WHERE email = $1`,
+    verificar_usuario: `UPDATE allevo.usuarios SET verificado = true, updated_at = NOW() WHERE id = $1 AND token_verificacion = $2 RETURNING id`,
+    create_login_token: `INSERT INTO allevo.registro_inicio_sesion (id_usuario,token,fecha_inicio,usado)VALUES ($1, $2, NOW(),false)`,
+    verify_login_token: `SELECT u.id, u.email, u.tipo_usuario, u.activo, u.verificado, t.token, t.usado FROM allevo.registro_inicio_sesion t INNER JOIN allevo.usuarios u ON u.id = t.id_usuario WHERE t.id_usuario = $1 AND t.token = $2 AND t.usado = false LIMIT 1`,
+    invalidate_login_token: `UPDATE allevo.registro_inicio_sesion SET usado = true WHERE id_usuario = $1 AND token = $2`,
 
     // ---- NOTICIAS ----
     get_noticias: `SELECT id, titulo, extracto, categoria, red_social, link_original, portada_url, id_referencia, created_at, comentario, updated_at, create_by, update_by, estatus

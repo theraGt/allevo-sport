@@ -1,17 +1,16 @@
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import config from './config.js';
 
 // Routes
-import authRoutes from './routes/authRoutes.js';
+import authRoutes from './routes/auth.routes.js';
 import atletasRoutes from './routes/atletasRoutes.js';
 import sponsorsRoutes from './routes/sponsorsRoutes.js';
 import inversionistasRoutes from './routes/inversionistasRoutes.js';
-import usuariosRoutes from './routes/usuariosRoutes.js';
-import noticiasRoutes from './routes/noticiasRoutes.js';
+import usuariosRoutes from './routes/usuarios.routes.js';
+import noticiasRoutes from './routes/noticias.routes.js';
 import proyectosRoutes from './routes/proyectosRoutes.js';
 import postulacionesRoutes from './routes/postulacionesRoutes.js';
 import noticiaCuerpoRoutes from './routes/noticiaCuerpoRoutes.js';
@@ -24,48 +23,52 @@ import deportesRoutes from './routes/deportesRoutes.js';
 
 const app = express();
 
-// CORS
-const corsOptions = {
-    origin: true,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    optionsSuccessStatus: 204
-};
+// ======================
+// MIDDLEWARES
+// ======================
+app.use(
+    helmet({
+        crossOriginResourcePolicy: false,
+        crossOriginOpenerPolicy: false
+    })
+);
 
-// Middleware global
-app.use(helmet({
-    crossOriginResourcePolicy: false,
-    crossOriginOpenerPolicy: false
-}));
-app.use(cors(corsOptions));
+app.use(
+    cors({
+        origin: true,
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization']
+    })
+);
 
-// Limpiar headers restrictivos que puedan interferir con el frontend
-app.use((req, res, next) => {
-    res.removeHeader('Cross-Origin-Resource-Policy');
-    res.removeHeader('Cross-Origin-Opener-Policy');
-    next();
-});
 app.use(morgan('dev'));
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+);
 
-// Configurar puerto
+// ======================
+// CONFIG
+// ======================
 app.set('port', config.port);
 
-// Health check
+// ======================
+// HEALTH CHECK
+// ======================
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', message: 'Allevo Sports API funcionando', timestamp: new Date() });
+    res.json({
+        status: 'OK',
+        message: 'Allevo Sports API funcionando',
+        timestamp: new Date()
+    });
 });
 
-// Debug route para ver qué está pasando
-app.get('/api/debug', (req, res) => {
-    res.json({ message: 'Debug endpoint works', time: new Date() });
-});
-
-// Rutas
+// ======================
+// ROUTES
+// ======================
 app.use('/api/auth', authRoutes);
 app.use('/api/atletas', atletasRoutes);
 app.use('/api/sponsors', sponsorsRoutes);
@@ -82,9 +85,13 @@ app.use('/api/atletas-bloques', atletaBloquesDirectRoutes);
 app.use('/api/atleta-logros', atletaLogrosRoutes);
 app.use('/api/deportes', deportesRoutes);
 
-// 404 handler
+// ======================
+// 404
+// ======================
 app.use((req, res) => {
-    res.status(404).json({ message: 'Ruta no encontrada' });
+    res.status(404).json({
+        message: 'Ruta no encontrada'
+    });
 });
 
 export default app;
