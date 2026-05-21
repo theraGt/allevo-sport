@@ -30,9 +30,9 @@ export const login = async (req, res) => {
         );
 
         res.json({
-            message: 'Login exitoso',
-            token: result.token,
-            user: result.user
+            message: result.message,
+            requires2FA: result.requires2FA,
+            userId: result.userId
         });
 
     } catch (err) {

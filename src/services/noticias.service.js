@@ -1,5 +1,6 @@
 import { getConnection } from '../database/connection.js';
 import queries from '../database/queries.js';
+import { publishEvent } from '../events/publisher.js';
 
 export const obtenerNoticias = async () => {
     const pool = await getConnection();
@@ -84,10 +85,14 @@ export const obtenerNoticiaPorId = async (id) => {
 };
 
 export const crearNoticia = async (data) => {
+
     const pool = await getConnection();
     const client = await pool.connect();
 
     try {
+
+        await client.query('BEGIN');
+
         const {
             titulo,
             extracto,
@@ -99,7 +104,8 @@ export const crearNoticia = async (data) => {
             comentario,
             create_by,
             updated_at,
-            estatus
+            estatus,
+            cuerpo = []
         } = data;
 
         const refId =
@@ -109,7 +115,8 @@ export const crearNoticia = async (data) => {
                 ? id_referencia
                 : null;
 
-        const result = await client.query(
+        // INSERTAR NOTICIA
+        const noticiaResult = await client.query(
             queries.create_noticia,
             [
                 titulo,
@@ -128,9 +135,46 @@ export const crearNoticia = async (data) => {
             ]
         );
 
-        return result.rows[0];
+        const noticia = noticiaResult.rows[0];
+
+        // INSERTAR CUERPO
+        for (const bloque of cuerpo) {
+
+            await client.query(
+                queries.create_noticia_cuerpo,
+                [
+                    noticia.id,
+                    bloque.tipo,
+                    bloque.contenido,
+                    bloque.orden
+                ]
+            );
+        }
+
+        await client.query('COMMIT');
+
+        await publishEvent(
+            'allevo',
+            'noticia.creada',
+            {
+                id: noticia.id,
+                titulo,
+                extracto,
+                categoria,
+                portada_url
+            }
+        );
+
+        return noticia;
+
+    } catch (error) {
+
+        await client.query('ROLLBACK');
+
+        throw error;
 
     } finally {
+
         client.release();
     }
 };

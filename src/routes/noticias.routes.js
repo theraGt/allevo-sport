@@ -9,10 +9,7 @@ import {
     deleteNoticia
 } from '../controllers/noticias.controller.js';
 
-import {
-    verifyToken,
-    isAdmin
-} from '../middleware/auth.middleware.js';
+import {verifyToken,isAdmin} from '../middleware/auth.middleware.js';
 
 const router = Router();
 
@@ -35,7 +32,7 @@ router.get(
 
 router.post(
     '/',
-    verifyToken,
+    //verifyToken,
     createNoticia
 );
 
