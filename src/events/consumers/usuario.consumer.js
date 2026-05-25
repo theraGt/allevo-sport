@@ -1,15 +1,10 @@
 import amqp from 'amqplib';
-
 import config from '../../config.js';
-
 import { sendEmail } from '../../utils/email.js';
-
 import { welcomeTemplate } from '../../templates/welcome.template.js';
 
 const EXCHANGE = 'allevo';
-
 const QUEUE = 'usuario.creado.email';
-
 const ROUTING_KEY = 'usuario.creado';
 
 export const startUsuarioConsumer = async () => {

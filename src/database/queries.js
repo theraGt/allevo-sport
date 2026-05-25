@@ -34,8 +34,8 @@ const queries = {
     // ---- INVERSIONISTAS ----
     get_inversionistas: `SELECT * FROM allevo.inversionistas ORDER BY id ASC`,
     get_inversionista_by_id: `SELECT * FROM allevo.inversionistas WHERE id = $1`,
-    create_inversionista: `INSERT INTO allevo.inversionistas (nombre, apellido, empresa, email, telefono, pais, descripcion, activo)
-                              VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+    create_inversionista: `INSERT INTO allevo.inversionistas (id,identificacion,tipo_identificacion,direccion,profesion,capital_disponible,moneda_preferida,riesgo_permitido,plazo_preferido,documentos_verificados,kyc_completado,contrato_marco_firmado,banco_nombre,banco_cuenta_tipo,banco_cuenta_numero) 
+                            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,false,false,false,$10,$11,$12) RETURNING *`,
     update_inversionista: `UPDATE allevo.inversionistas SET nombre=$1, apellido=$2, empresa=$3, email=$4, telefono=$5, pais=$6, descripcion=$7, activo=$8
                               WHERE id=$9 RETURNING id`,
     delete_inversionista: `DELETE FROM allevo.inversionistas WHERE id=$1`,
@@ -73,13 +73,14 @@ const queries = {
     create_noticia_cuerpo: `INSERT INTO allevo.noticia_cuerpo (noticia_id,tipo,contenido,orden) VALUES ($1,$2,$3,$4)`,
 
     // ---- PROYECTOS ----
-    get_proyectos: `SELECT * FROM allevo.proyectos ORDER BY id ASC`,
-    get_proyecto_by_id: `SELECT * FROM allevo.proyectos WHERE id = $1`,
-    create_proyecto: `INSERT INTO allevo.proyectos (nombre, descripcion, imagen_url, presupuesto, estado, fecha_inicio, fecha_fin, activo)
-                              VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
-    update_proyecto: `UPDATE allevo.proyectos SET nombre=$1, descripcion=$2, imagen_url=$3, presupuesto=$4, estado=$5, fecha_inicio=$6, fecha_fin=$7, activo=$8
-                              WHERE id=$9 RETURNING id`,
-    delete_proyecto: `DELETE FROM allevo.proyectos WHERE id=$1`,
+    create_proyecto: `INSERT INTO allevo.proyectos_inversion (titulo,slug,descripcion,objetivo,categoria,portada_url,galeria,ubicacion,monto_objetivo,monto_minimo_inversion,monto_maximo_inversion,tasa_retorno_base,tipo_retorno,plazo_dias,fecha_inicio,fecha_cierre,fecha_retorno_estimada,estado,destacado,create_by,updated_by)
+                        VALUES ($1, $2, $3, $4, $5,$6, $7, $8, $9, $10,$11, $12, $13, $14, $15,$16, $17, $18, $19, $20,$21) RETURNING *;`,
+    get_proyectos: `SELECT * FROM allevo.proyectos_inversion ORDER BY created_at DESC`,
+    get_proyecto_by_id: `SELECT * FROM allevo.proyectos_inversion WHERE id = $1`,
+    update_proyecto: `UPDATE allevo.proyectos_inversion SET titulo = $1,slug = $2,descripcion = $3,objetivo = $4,categoria = $5,portada_url = $6,galeria = $7,ubicacion = $8,monto_objetivo = $9,monto_minimo_inversion = $10,monto_maximo_inversion = $11,tasa_retorno_base = $12,tipo_retorno = $13,plazo_dias = $14,fecha_inicio = $15,fecha_cierre = $16,fecha_retorno_estimada = $17,estado = $18,destacado = $19,updated_by = $20,updated_at = CURRENT_TIMESTAMP WHERE id = $21`,
+    delete_proyecto: ` DELETE FROM allevo.proyectos_inversion WHERE id = $1`,
+    update_estado_proyecto: `UPDATE allevo.proyectos_inversion SET estado = $1,updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *;`,
+
 
     // ---- POSTULACIONES (genéricas: atleta, sponsor, inversionista) ----
     get_postulaciones: `SELECT id, tipo, nombre, email, telefono, ciudad, departamento, municipio, estado, notas_admin, datos, created_at, updated_at FROM allevo.postulaciones ORDER BY created_at DESC`,
