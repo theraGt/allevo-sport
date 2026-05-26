@@ -7,7 +7,7 @@ const queries = {
     // ---- ATLETAS (legacy - compatibilidad) ----
     // Usar get_atletas_enriched para nuevos desarrollos
     get_atletas: `SELECT * FROM allevo.atletas ORDER BY id_atleta ASC`,
-    get_atleta_by_id_legacy: `SELECT * FROM allevo.atletas WHERE id_atleta = $1`,
+    get_atleta_by_id: `SELECT * FROM allevo.atletas WHERE id = $1;`,
     create_atleta: `
         INSERT INTO allevo.atletas (usuario_id, deporte_principal_id, alias, activo)
         VALUES ($1, $2, $3, $4) RETURNING id_atleta
@@ -42,7 +42,7 @@ const queries = {
 
     // ---- USUARIOS ----
     get_usuarios: `SELECT id, email, tipo_usuario, nombres, apellidos, telefono, pais, ciudad, fecha_nacimiento, genero, verificado, activo, ultimo_acceso, created_at, updated_at FROM allevo.usuarios ORDER BY id ASC`,
-    get_usuario_by_id: `SELECT id, email, tipo_usuario, nombres, apellidos, telefono, pais, ciudad, fecha_nacimiento, genero, verificado, activo, ultimo_acceso, created_at, updated_at FROM allevo.usuarios WHERE id = $1`,
+    get_usuario_by_id: `SELECT * FROM allevo.usuarios WHERE id = $1`,
     get_usuario_by_email: `SELECT * FROM allevo.usuarios WHERE email = $1`,
     get_usuario_by_email_public: `SELECT id, email, tipo_usuario, nombres, apellidos, telefono, pais, ciudad, fecha_nacimiento, genero, verificado, activo, ultimo_acceso, created_at, updated_at FROM allevo.usuarios WHERE email = $1`,
     create_usuario: `INSERT INTO allevo.usuarios (nombres, apellidos, email, password_hash, tipo_usuario, token_verificacion, telefono, pais, ciudad, fecha_nacimiento, genero)
@@ -76,11 +76,22 @@ const queries = {
     create_proyecto: `INSERT INTO allevo.proyectos_inversion (titulo,slug,descripcion,objetivo,categoria,portada_url,galeria,ubicacion,monto_objetivo,monto_minimo_inversion,monto_maximo_inversion,tasa_retorno_base,tipo_retorno,plazo_dias,fecha_inicio,fecha_cierre,fecha_retorno_estimada,estado,destacado,create_by,updated_by)
                         VALUES ($1, $2, $3, $4, $5,$6, $7, $8, $9, $10,$11, $12, $13, $14, $15,$16, $17, $18, $19, $20,$21) RETURNING *;`,
     get_proyectos: `SELECT * FROM allevo.proyectos_inversion ORDER BY created_at DESC`,
-    get_proyecto_by_id: `SELECT * FROM allevo.proyectos_inversion WHERE id = $1`,
+    get_proyecto_by_id: `SELECT * FROM allevo.proyectos_inversion WHERE id = $1;`,
     update_proyecto: `UPDATE allevo.proyectos_inversion SET titulo = $1,slug = $2,descripcion = $3,objetivo = $4,categoria = $5,portada_url = $6,galeria = $7,ubicacion = $8,monto_objetivo = $9,monto_minimo_inversion = $10,monto_maximo_inversion = $11,tasa_retorno_base = $12,tipo_retorno = $13,plazo_dias = $14,fecha_inicio = $15,fecha_cierre = $16,fecha_retorno_estimada = $17,estado = $18,destacado = $19,updated_by = $20,updated_at = CURRENT_TIMESTAMP WHERE id = $21`,
     delete_proyecto: ` DELETE FROM allevo.proyectos_inversion WHERE id = $1`,
     update_estado_proyecto: `UPDATE allevo.proyectos_inversion SET estado = $1,updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *;`,
 
+
+    // ---- INVERSIONES ----
+    create_inversion: `INSERT INTO allevo.inversiones (inversionista_id,destino_tipo,destino_id,monto_invertido,moneda,tasa_retorno_aplicada,plazo_dias,fecha_retorno_estimada,estado,pago_metodo,notas)
+                            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)RETURNING *;`,
+    update_monto_recaudado_proyecto: `UPDATE allevo.proyectos_inversion SET monto_recaudado = monto_recaudado + $1,updated_at = CURRENT_TIMESTAMP WHERE id = $2;`,
+    create_transaccion_pago: `INSERT INTO allevo.transacciones_pago (inversion_id,tipo,monto,moneda,es_transferencia,banco_origen,banco_destino,estado)
+                                VALUES ($1,$2,$3,$4,$5,$6,$7,$8)RETURNING *;`,
+    create_contrato: `INSERT INTO allevo.contratos (inversion_id,inversionista_id,contrato_url,estado)
+                            VALUES ($1,$2,$3,$4)RETURNING *;`,
+    upload_comprobante_transaccion: `UPDATE allevo.transacciones_pago SET comprobante_url = $1,referencia_transferencia = $2, estado = 'en_revision', updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *;`,
+    update_contract_url: `UPDATE allevo.contratos SET contrato_url = $1,updated_at = CURRENT_TIMESTAMP WHERE inversion_id = $2 RETURNING *;`,
 
     // ---- POSTULACIONES (genéricas: atleta, sponsor, inversionista) ----
     get_postulaciones: `SELECT id, tipo, nombre, email, telefono, ciudad, departamento, municipio, estado, notas_admin, datos, created_at, updated_at FROM allevo.postulaciones ORDER BY created_at DESC`,

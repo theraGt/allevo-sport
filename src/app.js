@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes.js';
 import atletasRoutes from './routes/atletasRoutes.js';
 import sponsorsRoutes from './routes/sponsorsRoutes.js';
 import inversionistasRoutes from './routes/inversionistas.routes.js';
+import inversionesRoutes from './routes/inversiones.routes.js';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import noticiasRoutes from './routes/noticias.routes.js';
 import proyectosRoutes from './routes/proyectos.routes.js';
@@ -72,6 +73,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/atletas', atletasRoutes);
 app.use('/api/sponsors', sponsorsRoutes);
 app.use('/api/inversionistas', inversionistasRoutes);
+app.use('/api/inversiones', inversionesRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/noticias', noticiasRoutes);
 app.use('/api/proyectos', proyectosRoutes);
@@ -82,6 +84,11 @@ app.use('/api/atletas', atletaBloquesRoutes);
 app.use('/api/atletas-bloques', atletaBloquesDirectRoutes);
 app.use('/api/atleta-logros', atletaLogrosRoutes);
 app.use('/api/deportes', deportesRoutes);
+
+app.use(
+    '/uploads',
+    express.static('uploads')
+);
 
 // ======================
 // 404
